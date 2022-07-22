@@ -4655,6 +4655,7 @@ cat >prog.cbl <<'_ATEOF'
            EXEC SQL
                CLOSE C1
            END-EXEC.
+           DISPLAY "--".
 
            MOVE 5 TO EMP-NO-MIN-U.
            MOVE 9 TO EMP-NO-MAX-U.
@@ -4687,6 +4688,7 @@ cat >prog.cbl <<'_ATEOF'
            EXEC SQL
                CLOSE C2
            END-EXEC.
+           DISPLAY "--".
 
            MOVE "MIYAGI GORO" TO EMP-NAME-X.
            EXEC SQL
@@ -4717,6 +4719,7 @@ cat >prog.cbl <<'_ATEOF'
            EXEC SQL
                CLOSE C3
            END-EXEC.
+           DISPLAY "--".
 
            MOVE "MIYAGI GORO" TO EMP-NAME-X.
            MOVE 5 TO EMP-NO-MIN-U.
@@ -4750,6 +4753,72 @@ cat >prog.cbl <<'_ATEOF'
 
            EXEC SQL
                CLOSE C4
+           END-EXEC.
+           DISPLAY "--".
+
+           MOVE 5 TO EMP-NO.
+           EXEC SQL
+               DECLARE C5 CURSOR FOR
+               SELECT EMP_NO, EMP_NAME, EMP_SALARY
+                      FROM EMP
+                      GROUP BY EMP_NO
+                      HAVING EMP_NO = :EMP-NO
+                      ORDER BY EMP_NO
+           END-EXEC.
+           EXEC SQL
+               OPEN C5
+           END-EXEC.
+
+           EXEC SQL
+               FETCH C5 INTO :EMP-NO, :EMP-NAME, :EMP-SALARY
+           END-EXEC.
+           PERFORM UNTIL SQLCODE NOT = ZERO
+              MOVE  EMP-NO        TO    D-EMP-NO
+              MOVE  EMP-NAME      TO    D-EMP-NAME
+              MOVE  EMP-SALARY    TO    D-EMP-SALARY
+              DISPLAY D-EMP-REC
+              EXEC SQL
+                  FETCH C5 INTO :EMP-NO, :EMP-NAME, :EMP-SALARY
+              END-EXEC
+      *       ADD 1 TO LOOP-COUNTER
+           END-PERFORM.
+
+           EXEC SQL
+               CLOSE C5
+           END-EXEC.
+           DISPLAY "--".
+
+           MOVE 5 TO EMP-NO-MIN-U.
+           MOVE 9 TO EMP-NO-MAX-U.
+           EXEC SQL
+               DECLARE C6 CURSOR FOR
+               SELECT EMP_NO, EMP_NAME, EMP_SALARY
+                      FROM EMP
+                      WHERE EMP_NO >= :EMP-NO-MIN-U
+                      GROUP BY EMP_NO
+                      HAVING EMP_NO <= :EMP-NO-MAX-U
+                      ORDER BY EMP_NO
+           END-EXEC.
+           EXEC SQL
+               OPEN C6
+           END-EXEC.
+
+           EXEC SQL
+               FETCH C6 INTO :EMP-NO, :EMP-NAME, :EMP-SALARY
+           END-EXEC.
+           PERFORM UNTIL SQLCODE NOT = ZERO
+              MOVE  EMP-NO        TO    D-EMP-NO
+              MOVE  EMP-NAME      TO    D-EMP-NAME
+              MOVE  EMP-SALARY    TO    D-EMP-SALARY
+              DISPLAY D-EMP-REC
+              EXEC SQL
+                  FETCH C6 INTO :EMP-NO, :EMP-NAME, :EMP-SALARY
+              END-EXEC
+      *       ADD 1 TO LOOP-COUNTER
+           END-PERFORM.
+
+           EXEC SQL
+               CLOSE C6
            END-EXEC.
 
       *    DISCONNECT
@@ -4789,47 +4858,47 @@ _ATEOF
 
 
 { set +x
-$as_echo "$at_srcdir/declare-bind-var.at:269: ocesql prog.cbl prog.cob > /dev/null"
-at_fn_check_prepare_trace "declare-bind-var.at:269"
+$as_echo "$at_srcdir/declare-bind-var.at:338: ocesql prog.cbl prog.cob > /dev/null"
+at_fn_check_prepare_trace "declare-bind-var.at:338"
 ( $at_check_trace; ocesql prog.cbl prog.cob > /dev/null
 ) >>"$at_stdout" 2>>"$at_stderr" 5>&-
 at_status=$? at_failed=false
 $at_check_filter
 at_fn_diff_devnull "$at_stderr" || at_failed=:
 at_fn_diff_devnull "$at_stdout" || at_failed=:
-at_fn_check_status 0 $at_status "$at_srcdir/declare-bind-var.at:269"
+at_fn_check_status 0 $at_status "$at_srcdir/declare-bind-var.at:338"
 $at_failed && at_fn_log_failure
 $at_traceon; }
 
 { set +x
-$as_echo "$at_srcdir/declare-bind-var.at:270: \${EMBED_DB_INFO} prog.cob"
-at_fn_check_prepare_notrace 'a ${...} parameter expansion' "declare-bind-var.at:270"
+$as_echo "$at_srcdir/declare-bind-var.at:339: \${EMBED_DB_INFO} prog.cob"
+at_fn_check_prepare_notrace 'a ${...} parameter expansion' "declare-bind-var.at:339"
 ( $at_check_trace; ${EMBED_DB_INFO} prog.cob
 ) >>"$at_stdout" 2>>"$at_stderr" 5>&-
 at_status=$? at_failed=false
 $at_check_filter
 at_fn_diff_devnull "$at_stderr" || at_failed=:
 at_fn_diff_devnull "$at_stdout" || at_failed=:
-at_fn_check_status 0 $at_status "$at_srcdir/declare-bind-var.at:270"
+at_fn_check_status 0 $at_status "$at_srcdir/declare-bind-var.at:339"
 $at_failed && at_fn_log_failure
 $at_traceon; }
 
 { set +x
-$as_echo "$at_srcdir/declare-bind-var.at:271: \${COMPILE_MODULE} prog.cob"
-at_fn_check_prepare_notrace 'a ${...} parameter expansion' "declare-bind-var.at:271"
+$as_echo "$at_srcdir/declare-bind-var.at:340: \${COMPILE_MODULE} prog.cob"
+at_fn_check_prepare_notrace 'a ${...} parameter expansion' "declare-bind-var.at:340"
 ( $at_check_trace; ${COMPILE_MODULE} prog.cob
 ) >>"$at_stdout" 2>>"$at_stderr" 5>&-
 at_status=$? at_failed=false
 $at_check_filter
 at_fn_diff_devnull "$at_stderr" || at_failed=:
 at_fn_diff_devnull "$at_stdout" || at_failed=:
-at_fn_check_status 0 $at_status "$at_srcdir/declare-bind-var.at:271"
+at_fn_check_status 0 $at_status "$at_srcdir/declare-bind-var.at:340"
 $at_failed && at_fn_log_failure
 $at_traceon; }
 
 { set +x
-$as_echo "$at_srcdir/declare-bind-var.at:272: \${RUN_MODULE} prog | tee stdout.txt "
-at_fn_check_prepare_notrace 'a ${...} parameter expansion' "declare-bind-var.at:272"
+$as_echo "$at_srcdir/declare-bind-var.at:341: \${RUN_MODULE} prog | tee stdout.txt "
+at_fn_check_prepare_notrace 'a ${...} parameter expansion' "declare-bind-var.at:341"
 ( $at_check_trace; ${RUN_MODULE} prog | tee stdout.txt
 ) >>"$at_stdout" 2>>"$at_stderr" 5>&-
 at_status=$? at_failed=false
@@ -4840,11 +4909,22 @@ echo >>"$at_stdout"; $as_echo "0005 MIYAGI GORO            -200
 0007 TOCHIGI SHICHIRO       -100
 0008 IBARAKI HACHIRO          50
 0009 GUMMA KURO             -200
+--
 0005 MIYAGI GORO            -200
 0006 FUKUSHIMA RIKURO        150
 0007 TOCHIGI SHICHIRO       -100
 0008 IBARAKI HACHIRO          50
 0009 GUMMA KURO             -200
+--
+0005 MIYAGI GORO            -200
+--
+0006 FUKUSHIMA RIKURO        150
+0007 TOCHIGI SHICHIRO       -100
+0008 IBARAKI HACHIRO          50
+0009 GUMMA KURO             -200
+--
+0005 MIYAGI GORO            -200
+--
 0005 MIYAGI GORO            -200
 0006 FUKUSHIMA RIKURO        150
 0007 TOCHIGI SHICHIRO       -100
@@ -4852,7 +4932,7 @@ echo >>"$at_stdout"; $as_echo "0005 MIYAGI GORO            -200
 0009 GUMMA KURO             -200
 " | \
   $at_diff - "$at_stdout" || at_failed=:
-at_fn_check_status 0 $at_status "$at_srcdir/declare-bind-var.at:272"
+at_fn_check_status 0 $at_status "$at_srcdir/declare-bind-var.at:341"
 $at_failed && at_fn_log_failure
 $at_traceon; }
 

@@ -134,6 +134,7 @@ AT_DATA([prog.cbl], [
            EXEC SQL 
                CLOSE C1 
            END-EXEC. 
+           DISPLAY "--".
 
            MOVE 5 TO EMP-NO-MIN-U.
            MOVE 9 TO EMP-NO-MAX-U.
@@ -166,6 +167,7 @@ AT_DATA([prog.cbl], [
            EXEC SQL 
                CLOSE C2 
            END-EXEC. 
+           DISPLAY "--".
 
            MOVE "MIYAGI GORO" TO EMP-NAME-X.
            EXEC SQL 
@@ -196,6 +198,7 @@ AT_DATA([prog.cbl], [
            EXEC SQL 
                CLOSE C3
            END-EXEC.
+           DISPLAY "--".
 
            MOVE "MIYAGI GORO" TO EMP-NAME-X.
            MOVE 5 TO EMP-NO-MIN-U.
@@ -229,6 +232,72 @@ AT_DATA([prog.cbl], [
            
            EXEC SQL 
                CLOSE C4
+           END-EXEC.
+           DISPLAY "--".
+
+           MOVE 5 TO EMP-NO.
+           EXEC SQL 
+               DECLARE C5 CURSOR FOR
+               SELECT EMP_NO, EMP_NAME, EMP_SALARY 
+                      FROM EMP
+                      GROUP BY EMP_NO
+                      HAVING EMP_NO = :EMP-NO
+                      ORDER BY EMP_NO
+           END-EXEC.
+           EXEC SQL
+               OPEN C5
+           END-EXEC.
+           
+           EXEC SQL 
+               FETCH C5 INTO :EMP-NO, :EMP-NAME, :EMP-SALARY
+           END-EXEC.
+           PERFORM UNTIL SQLCODE NOT = ZERO 
+              MOVE  EMP-NO        TO    D-EMP-NO
+              MOVE  EMP-NAME      TO    D-EMP-NAME
+              MOVE  EMP-SALARY    TO    D-EMP-SALARY
+              DISPLAY D-EMP-REC
+              EXEC SQL 
+                  FETCH C5 INTO :EMP-NO, :EMP-NAME, :EMP-SALARY
+              END-EXEC
+      *       ADD 1 TO LOOP-COUNTER
+           END-PERFORM.
+
+           EXEC SQL 
+               CLOSE C5
+           END-EXEC.
+           DISPLAY "--".
+
+           MOVE 5 TO EMP-NO-MIN-U.
+           MOVE 9 TO EMP-NO-MAX-U.
+           EXEC SQL 
+               DECLARE C6 CURSOR FOR
+               SELECT EMP_NO, EMP_NAME, EMP_SALARY 
+                      FROM EMP
+                      WHERE EMP_NO >= :EMP-NO-MIN-U
+                      GROUP BY EMP_NO
+                      HAVING EMP_NO <= :EMP-NO-MAX-U
+                      ORDER BY EMP_NO
+           END-EXEC.
+           EXEC SQL
+               OPEN C6
+           END-EXEC.
+           
+           EXEC SQL 
+               FETCH C6 INTO :EMP-NO, :EMP-NAME, :EMP-SALARY
+           END-EXEC.
+           PERFORM UNTIL SQLCODE NOT = ZERO 
+              MOVE  EMP-NO        TO    D-EMP-NO
+              MOVE  EMP-NAME      TO    D-EMP-NAME
+              MOVE  EMP-SALARY    TO    D-EMP-SALARY
+              DISPLAY D-EMP-REC
+              EXEC SQL 
+                  FETCH C6 INTO :EMP-NO, :EMP-NAME, :EMP-SALARY
+              END-EXEC
+      *       ADD 1 TO LOOP-COUNTER
+           END-PERFORM.
+
+           EXEC SQL 
+               CLOSE C6
            END-EXEC.
            
       *    DISCONNECT
@@ -275,11 +344,22 @@ AT_CHECK([${RUN_MODULE} prog | tee stdout.txt ], [0],
 0007 TOCHIGI SHICHIRO       -100
 0008 IBARAKI HACHIRO          50
 0009 GUMMA KURO             -200
+--
 0005 MIYAGI GORO            -200
 0006 FUKUSHIMA RIKURO        150
 0007 TOCHIGI SHICHIRO       -100
 0008 IBARAKI HACHIRO          50
 0009 GUMMA KURO             -200
+--
+0005 MIYAGI GORO            -200
+--
+0006 FUKUSHIMA RIKURO        150
+0007 TOCHIGI SHICHIRO       -100
+0008 IBARAKI HACHIRO          50
+0009 GUMMA KURO             -200
+--
+0005 MIYAGI GORO            -200
+--
 0005 MIYAGI GORO            -200
 0006 FUKUSHIMA RIKURO        150
 0007 TOCHIGI SHICHIRO       -100
