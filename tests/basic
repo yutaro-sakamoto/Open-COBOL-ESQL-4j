@@ -4688,6 +4688,36 @@ cat >prog.cbl <<'_ATEOF'
                CLOSE C2
            END-EXEC.
 
+           MOVE "MIYAGI GORO" TO EMP-NAME-X.
+           EXEC SQL
+               DECLARE C3 CURSOR FOR
+               SELECT EMP_NO, EMP_NAME, EMP_SALARY
+                      FROM EMP
+                      WHERE EMP_NAME = :EMP-NAME-X
+                      ORDER BY EMP_NO
+           END-EXEC.
+           EXEC SQL
+               OPEN C3
+           END-EXEC.
+
+           EXEC SQL
+               FETCH C3 INTO :EMP-NO, :EMP-NAME, :EMP-SALARY
+           END-EXEC.
+           PERFORM UNTIL SQLCODE NOT = ZERO
+              MOVE  EMP-NO        TO    D-EMP-NO
+              MOVE  EMP-NAME      TO    D-EMP-NAME
+              MOVE  EMP-SALARY    TO    D-EMP-SALARY
+              DISPLAY D-EMP-REC
+              EXEC SQL
+                  FETCH C3 INTO :EMP-NO, :EMP-NAME, :EMP-SALARY
+              END-EXEC
+      *       ADD 1 TO LOOP-COUNTER
+           END-PERFORM.
+
+           EXEC SQL
+               CLOSE C3
+           END-EXEC.
+
       *    DISCONNECT
            EXEC SQL
                DISCONNECT ALL
@@ -4725,47 +4755,47 @@ _ATEOF
 
 
 { set +x
-$as_echo "$at_srcdir/declare-bind-var.at:205: ocesql prog.cbl prog.cob > /dev/null"
-at_fn_check_prepare_trace "declare-bind-var.at:205"
+$as_echo "$at_srcdir/declare-bind-var.at:235: ocesql prog.cbl prog.cob > /dev/null"
+at_fn_check_prepare_trace "declare-bind-var.at:235"
 ( $at_check_trace; ocesql prog.cbl prog.cob > /dev/null
 ) >>"$at_stdout" 2>>"$at_stderr" 5>&-
 at_status=$? at_failed=false
 $at_check_filter
 at_fn_diff_devnull "$at_stderr" || at_failed=:
 at_fn_diff_devnull "$at_stdout" || at_failed=:
-at_fn_check_status 0 $at_status "$at_srcdir/declare-bind-var.at:205"
+at_fn_check_status 0 $at_status "$at_srcdir/declare-bind-var.at:235"
 $at_failed && at_fn_log_failure
 $at_traceon; }
 
 { set +x
-$as_echo "$at_srcdir/declare-bind-var.at:206: \${EMBED_DB_INFO} prog.cob"
-at_fn_check_prepare_notrace 'a ${...} parameter expansion' "declare-bind-var.at:206"
+$as_echo "$at_srcdir/declare-bind-var.at:236: \${EMBED_DB_INFO} prog.cob"
+at_fn_check_prepare_notrace 'a ${...} parameter expansion' "declare-bind-var.at:236"
 ( $at_check_trace; ${EMBED_DB_INFO} prog.cob
 ) >>"$at_stdout" 2>>"$at_stderr" 5>&-
 at_status=$? at_failed=false
 $at_check_filter
 at_fn_diff_devnull "$at_stderr" || at_failed=:
 at_fn_diff_devnull "$at_stdout" || at_failed=:
-at_fn_check_status 0 $at_status "$at_srcdir/declare-bind-var.at:206"
+at_fn_check_status 0 $at_status "$at_srcdir/declare-bind-var.at:236"
 $at_failed && at_fn_log_failure
 $at_traceon; }
 
 { set +x
-$as_echo "$at_srcdir/declare-bind-var.at:207: \${COMPILE_MODULE} prog.cob"
-at_fn_check_prepare_notrace 'a ${...} parameter expansion' "declare-bind-var.at:207"
+$as_echo "$at_srcdir/declare-bind-var.at:237: \${COMPILE_MODULE} prog.cob"
+at_fn_check_prepare_notrace 'a ${...} parameter expansion' "declare-bind-var.at:237"
 ( $at_check_trace; ${COMPILE_MODULE} prog.cob
 ) >>"$at_stdout" 2>>"$at_stderr" 5>&-
 at_status=$? at_failed=false
 $at_check_filter
 at_fn_diff_devnull "$at_stderr" || at_failed=:
 at_fn_diff_devnull "$at_stdout" || at_failed=:
-at_fn_check_status 0 $at_status "$at_srcdir/declare-bind-var.at:207"
+at_fn_check_status 0 $at_status "$at_srcdir/declare-bind-var.at:237"
 $at_failed && at_fn_log_failure
 $at_traceon; }
 
 { set +x
-$as_echo "$at_srcdir/declare-bind-var.at:208: \${RUN_MODULE} prog | tee stdout.txt "
-at_fn_check_prepare_notrace 'a ${...} parameter expansion' "declare-bind-var.at:208"
+$as_echo "$at_srcdir/declare-bind-var.at:238: \${RUN_MODULE} prog | tee stdout.txt "
+at_fn_check_prepare_notrace 'a ${...} parameter expansion' "declare-bind-var.at:238"
 ( $at_check_trace; ${RUN_MODULE} prog | tee stdout.txt
 ) >>"$at_stdout" 2>>"$at_stderr" 5>&-
 at_status=$? at_failed=false
@@ -4781,9 +4811,10 @@ echo >>"$at_stdout"; $as_echo "0005 MIYAGI GORO            -200
 0007 TOCHIGI SHICHIRO       -100
 0008 IBARAKI HACHIRO          50
 0009 GUMMA KURO             -200
+0005 MIYAGI GORO            -200
 " | \
   $at_diff - "$at_stdout" || at_failed=:
-at_fn_check_status 0 $at_status "$at_srcdir/declare-bind-var.at:208"
+at_fn_check_status 0 $at_status "$at_srcdir/declare-bind-var.at:238"
 $at_failed && at_fn_log_failure
 $at_traceon; }
 
