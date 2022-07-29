@@ -346,10 +346,12 @@ class OCESQLCursorDeclareParams extends CobolRunnableWrapper {
     val cname = getCString(args(1))
     val query = getCString(args(2))
     val nParams = storageToInt(args(3))
+
     for {
       _ <- logLn("OCESQLCursorDeclareParams start")
       _ <- logLn(s"SQL:#${query}#")
       connInfo <- resolveCONNID(OCESQL_DEFAULT_DB_NAME)
+      state <- getState
       returnCode <- connInfo match {
         case None => for {
           _ <- errorLogLn("connection id is not found")
@@ -505,13 +507,15 @@ class OCESQLCursorOpen extends CobolRunnableWrapper {
       _ <- operationCPure(updateCursorMap(name, cursor))
 
       _ <- operationCPure(if(cursor.nParams > 0) {
-        //TODO implement
-        /*val args = cursor.sqlVarQueue.zipWithIndex.map(s => {
-          val (sv, i) = s
-          createRealData(sv, i)
-        })
-        OCDBCursorDeclareParams(....)*/
-        operationPure(())
+        for {
+          //TODO the following code should be improved
+          args <- transform(cursor.sqlVarQueue.map(sv => {
+            for {
+              x <- createRealData(sv, 0)
+            } yield x
+          }))
+          _ <- OCDBCursorDeclareParams(cursor.connId, cursor.name, cursor.query, args, OCDB_CURSOR_WITH_HOLD_OFF)
+        } yield ()
       } else {
         cursor.sp match {
           case q :: _ =>
@@ -530,6 +534,15 @@ class OCESQLCursorOpen extends CobolRunnableWrapper {
       _ <- operationCPure(updateCursorMap(name, cursor.setIsOpened(true)))
     } yield 0).eval
   }
+
+  private def transform[A](queue: Queue[Operation[A]]): Operation[Queue[A]] =
+    queue match {
+      case x +: xs => for {
+        y <- x
+        ys <- transform(xs)
+      } yield y +: ys
+      case _ => operationPure(Queue())
+    }
 }
 
 class OCESQLCursorOpenParams extends CobolRunnableWrapper {
