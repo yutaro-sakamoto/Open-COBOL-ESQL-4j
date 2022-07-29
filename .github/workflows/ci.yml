@@ -1,0 +1,115 @@
+name: Open-COBOL-ESQL-4j tests on Ubuntu
+
+on:
+  push:
+  pull_request:
+    types: [opened, reopened, review_requested, synchronize]
+
+jobs:
+  Open-COBOL-ESQL-4j-tests:
+    runs-on: ubuntu-latest
+    
+    # Start PostgreSQL server
+    services:
+      postgres:
+        image: postgres:9.6
+        ports: 
+          - 5432:5432
+        env:
+          POSTGRES_PASSWORD: password
+          POSTGRES_USER: main_user
+          POSTGRES_DB: testdb
+          POSTGRES_HOST_AUTH_METHOD: 'trust'
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git
+          sudo apt-get install -y build-essential bison flex gettext texinfo
+
+      - name: Setup JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 11
+
+      # Checkout Open-COBOL-ESQL-4j
+      - name: Checkout Open-COBOL-ESQL-4j
+        uses: actions/checkout@v2
+
+      # Cache the directory ~/.java_lib
+      - name: Cache opnesource COBOL 4j v1.0.4
+        id: java_lib_cache_id
+        uses: actions/cache@v2
+        with:
+          path: ~/.java_lib
+          key: java_lib_key
+
+      # Install JDBC
+      - name: Install JDBC
+        if: steps.java_lib_cache_id.outputs.cache-hit != 'true'
+        run: |
+          mkdir ~/.java_lib
+          curl -L -o ~/.java_lib/sqlite.jar https://github.com/xerial/sqlite-jdbc/releases/download/3.36.0.3/sqlite-jdbc-3.36.0.3.jar
+          curl -L -o ~/.java_lib/postgresql.jar https://jdbc.postgresql.org/download/postgresql-42.2.24.jre6.jar
+      
+      # Cache the directory 'opensource-cobol-1.0.4'
+      - name: Cache opnesource COBOL 4j
+        id: opensourcecobol4j_cache_id
+        uses: actions/cache@v2
+        with:
+          path: opensourcecobol4j
+          key: opensourcecobol4j-key
+          
+      # Build opensource COBOL if the cache is not found
+      - name: Download and Build opensource COBOL
+        if: steps.opensourcecobol4j_cache_id.outputs.cache-hit != 'true'
+        run: |
+          git clone -b ci/ocesql4j https://github.com/yutaro-sakamoto/opensourcecobol4j.git
+          cd opensourcecobol4j
+          ./configure --prefix=/usr/
+          export CLASSPATH="$HOME/.java_lib/sqlite.jar"
+          make
+      
+      # Install opensource COBOL
+      - name: Install opensource COBOL v1.0.4
+        run: |
+          cd opensourcecobol4j
+          sudo make install
+          cp libcobj/build/libcobj.jar ~/.java_lib
+
+      # Build and Install Open-COBOL-ESQL-4j
+      - name: Install Open-COBOL-ESQL-4j
+        run: |
+          sh configure --prefix=/usr/
+          make
+          sudo make install
+          cp ~/.java_lib/{libcobj,postgresql}.jar dblibj/lib
+          cd dblibj
+          export CLASSPATH="$HOME/.java_lib/sqlite.jar:$HOME/.java_lib/postgresql.jar:$HOME/.java_lib/libcobj.jar"
+          sbt assembly
+          cp target/scala-2.13/ocesql4j.jar ~/.java_lib  
+
+      # Run Autotest
+      - name: Run tests
+        run: |
+          export CLASSPATH=":$HOME/.java_lib/sqlite.jar:$HOME/.java_lib/postgresql.jar:$HOME/.java_lib/libcobj.jar:$HOME/.java_lib/ocesql4j.jar"
+          cd tests
+          cp ../.github/workflows/ubuntu-test-settings/embed_db_info.sh embed_db_info.sh
+          make
+          ./basic
+          ./cobol_data
+          ./sql_data
+          ./sqlca
+
+      - name: Slack Notification
+        if: ${{ failure() }}
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}

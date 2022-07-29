@@ -112,7 +112,6 @@ dblibj/project/target/active.json
 #######################
 
 Makefile
-compile
 config.h
 config.h.in~
 config.log
@@ -120,8 +119,14 @@ config.status
 dblib/.deps/
 dblib/Makefile
 libtool
+ocesql/*.o
 ocesql/.deps/
 ocesql/Makefile
+ocesql/ocesql
 stamp-h1
 tests/run.sh
 tests/*.log
+tests/basic
+tests/cobol_data
+tests/sql_data
+tests/sqlca

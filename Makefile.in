@@ -156,7 +156,7 @@ am__define_uniq_tagged_files = \
 ETAGS = etags
 CTAGS = ctags
 CSCOPE = cscope
-DIST_SUBDIRS = dblib ocesql
+DIST_SUBDIRS = ocesql tests
 am__DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/config.h.in AUTHORS \
 	COPYING ChangeLog INSTALL NEWS README compile config.guess \
 	config.sub install-sh ltmain.sh missing ylwrap
@@ -330,7 +330,9 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 @DISABLE_OCESQL_FALSE@OCESQL = ocesql
 @DISABLE_OCESQL_TRUE@OCESQL = 
-SUBDIRS = dblib $(OCESQL)
+
+#SUBDIRS = dblib $(OCESQL)
+SUBDIRS = $(OCESQL) tests
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
 
