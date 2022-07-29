@@ -101,9 +101,27 @@ dblibj/.idea/httpRequests
 dblibj/.idea/caches/build_file_checksums.ser
 
 #####################
+
 .tags
 *.jar
 dblibj/lib/~BROMIUM/
 dblibj/project/target/active.json
 *.class
 *.cache
+
+#######################
+
+Makefile
+compile
+config.h
+config.h.in~
+config.log
+config.status
+dblib/.deps/
+dblib/Makefile
+libtool
+ocesql/.deps/
+ocesql/Makefile
+stamp-h1
+tests/run.sh
+tests/*.log
