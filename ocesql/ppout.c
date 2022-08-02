@@ -141,124 +141,22 @@ void sql_string(struct cb_exec_list *wk_text){
 	}
 	com_strcat(sqlloop, sqlloop_len+1, wk_sql->sqltext);
 
-	for(;;){
-		charcount=0;
-		com_strcpy(sqlstr[0],256,"OCESQL     02  FILLER PIC X(000) VALUE \"");
-		com_strcpy(sqlstr[1],256,"OCESQL  &  \"");
-		com_strcpy(sqlstr[2],256,"OCESQL  &  \"");
-		com_strcpy(sqlstr[3],256,"OCESQL  &  \"");
-		com_strcpy(sqlstr[4],256,"OCESQL  &  \"");
-		len = strlen(sqlloop);
-		if(len<256){
-			intNUM = SQcount(len);
-			sqlstr[0][28] = intNUM[0];
-			sqlstr[0][29] = intNUM[1];
-			sqlstr[0][30] = intNUM[2];
-		}else{
-			sqlstr[0][28] = '2';
-			sqlstr[0][29] = '5';
-			sqlstr[0][30] = '6';
-		}
-		com_strcat(sqlstr[0], sizeof(sqlstr[0]), substring(30, sqlloop, 0));
-		com_strcat(sqlstr[0], sizeof(sqlstr[0]), "\"");
+	int sqllen = strlen(sqlloop);
+	fprintf(outfile, "OCESQL     02  FILLER PIC X(%d) VALUE", sqllen);
 
-		if((strlen(sqlstr[0]) == 72)){
-			charcount++;
+	int i = 0;
+	while(i < sqllen) {
+		fprintf(outfile, i == 0
+			? "\nOCESQL     \""
+			: "\nOCESQL  &  \"");
+		int j;
+		for(j=0; j<58 && i<sqllen; ++i, ++j) {
+			fputc(sqlloop[i], outfile);
 		}
-		sqlstr[0][72]='\0';
-		if(EOFFLG == 1){
-			com_strcat(sqlstr[0], sizeof(sqlstr[0]), ".");
-		}
-		if(!EOFFLG){
-			com_strcat(sqlstr[1], sizeof(sqlstr[1]), substring(58, sqlloop, 0));
-			com_strcat(sqlstr[1], sizeof(sqlstr[1]), "\"");
-			if ((strlen(sqlstr[1]) == 72)){
-				charcount++;
-			}
-
-			sqlstr[1][72]='\0';
-
-			if(EOFFLG == 1){
-				com_strcat(sqlstr[1], sizeof(sqlstr[1]), ".");
-			}
-		}
-		if(!EOFFLG){
-			com_strcat(sqlstr[2], sizeof(sqlstr[2]), substring(58, sqlloop, 0));
-			com_strcat(sqlstr[2], sizeof(sqlstr[2]), "\"");
-			if ((strlen(sqlstr[2]) == 72)){
-				charcount++;
-			}
-
-			sqlstr[2][72]='\0';
-
-			if(EOFFLG == 1){
-				com_strcat(sqlstr[2], sizeof(sqlstr[2]), ".");
-			}
-		}
-		if(!EOFFLG){
-			com_strcat(sqlstr[3], sizeof(sqlstr[3]), substring(58, sqlloop, 0));
-			com_strcat(sqlstr[3], sizeof(sqlstr[3]), "\"");
-			if ((strlen(sqlstr[3]) == 72)){
-				charcount++;
-			}
-
-			sqlstr[3][72]='\0';
-
-			if(EOFFLG == 1){
-				com_strcat(sqlstr[3], sizeof(sqlstr[3]), ".");
-			}
-		}
-		if(!EOFFLG){
-			com_strcat(sqlstr[4], sizeof(sqlstr[4]), substring(52 - charcount, sqlloop, 1));
-			com_strcat(sqlstr[4], sizeof(sqlstr[4]), "\"");
-			sqlstr[4][72] = '\0';
-
-			if(strlen(sqlstr[4]) != ( 65 - charcount ) && !EOFFLG){
-				sqlstr[0][28] = '2';
-				sqlstr[0][29] = '5';
-				sqlstr[0][30] = '5';
-			}
-
-			com_strcat(sqlstr[4], sizeof(sqlstr[4]), ".");
-		}
-
-		com_strcpy(out,sizeof(out),sqlstr[0]);
-		outwrite();
-		if(strncmp(compsql, sqlstr[1], 14) == 0){
-			com_strcpy(out,sizeof(out),terminal);
-			outwrite();
-		} else if(sqlstr[1][12] !='\0'){
-			com_strcpy(out,sizeof(out),sqlstr[1]);
-			outwrite();
-		}
-		if(strncmp(compsql, sqlstr[2], 14) == 0){
-			com_strcpy(out,sizeof(out),terminal);
-			outwrite();
-		} else if(sqlstr[2][12] !='\0'){
-			com_strcpy(out,sizeof(out),sqlstr[2]);
-			outwrite();
-		}
-		if(strncmp(compsql, sqlstr[3], 14) == 0){
-			com_strcpy(out,sizeof(out),terminal);
-			outwrite();
-		} else if(sqlstr[3][12] !='\0'){
-			com_strcpy(out,sizeof(out),sqlstr[3]);
-			outwrite();
-		}
-		if(strncmp(compsql, sqlstr[4], 14) == 0){
-			com_strcpy(out,sizeof(out),terminal);
-			outwrite();
-		} else if(sqlstr[4][12] !='\0'){
-			com_strcpy(out,sizeof(out),sqlstr[4]);
-			outwrite();
-		}
-		if(EOFFLG == 1){
-			EOFFLG = 0;
-			com_strcpy(out,sizeof(out),"OCESQL     02  FILLER PIC X(1) VALUE X\"00\".");
-			outwrite();
-			break;
-		}
+		fprintf(outfile, i == sqllen ? "\"." : "\"");
 	}
+	fprintf(outfile, "\nOCESQL     02  FILLER PIC X(1) VALUE X\"00\".\n");
+
 	free(sqlloop);
 }
 
