@@ -1,0 +1,5 @@
+AT_INIT(basic test)
+
+AT_TESTED([ocesql])
+
+m4_include([long-sql.at])

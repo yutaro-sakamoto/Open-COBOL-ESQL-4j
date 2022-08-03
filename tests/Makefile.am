@@ -1,7 +1,8 @@
 TESTS = basic \
 	cobol_data \
 	sql_data \
-	sqlca
+	sqlca \
+	misc
 
 basic_DEPENDENCIES = \
 	basic.src/commit-rollback.at \
@@ -31,6 +32,9 @@ sqlca_DEPENDENCIES = \
 	sqlca.src/insert-select-update-delete.at \
 	sqlca.src/open-fetch-close.at \
 	sqlca.src/prepare-execute.at
+
+misc_DEPENDENCIES = \
+	misc.src/long-sql.at
 
 EXTRA_DIST = $(srcdir)/package.m4 \
 	$(TESTS) \
@@ -65,3 +69,4 @@ $(srcdir)/basic: $(basic_DEPENDENCIES)
 $(srcdir)/cobol_data: $(cobol_data_DEPENDENCIES)
 $(srcdir)/sql_data: $(sql_data_DEPENDENCIES)
 $(srcdir)/sqlca: $(sqlca_DEPENDENCIES)
+$(srcdir)/misc: $(misc_DEPENDENCIES)

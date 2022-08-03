@@ -452,7 +452,8 @@ top_srcdir = @top_srcdir@
 TESTS = basic \
 	cobol_data \
 	sql_data \
-	sqlca
+	sqlca \
+	misc
 
 basic_DEPENDENCIES = \
 	basic.src/commit-rollback.at \
@@ -482,6 +483,9 @@ sqlca_DEPENDENCIES = \
 	sqlca.src/insert-select-update-delete.at \
 	sqlca.src/open-fetch-close.at \
 	sqlca.src/prepare-execute.at
+
+misc_DEPENDENCIES = \
+	misc.src/long-sql.at
 
 EXTRA_DIST = $(srcdir)/package.m4 \
 	$(TESTS) \
@@ -706,6 +710,13 @@ sqlca.log: sqlca
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
 	"$$tst" $(AM_TESTS_FD_REDIRECT)
+misc.log: misc
+	@p='misc'; \
+	b='misc'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
 .test.log:
 	@p='$<'; \
 	$(am__set_b); \
@@ -901,6 +912,7 @@ $(srcdir)/basic: $(basic_DEPENDENCIES)
 $(srcdir)/cobol_data: $(cobol_data_DEPENDENCIES)
 $(srcdir)/sql_data: $(sql_data_DEPENDENCIES)
 $(srcdir)/sqlca: $(sqlca_DEPENDENCIES)
+$(srcdir)/misc: $(misc_DEPENDENCIES)
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

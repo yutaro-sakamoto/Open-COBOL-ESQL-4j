@@ -1,4 +1,4 @@
-### https://raw.github.com/github/gitignore/b0012e4930d0a8c350254a3caeedf7441ea286a3/Scala.gitignore
+g## https://raw.github.com/github/gitignore/b0012e4930d0a8c350254a3caeedf7441ea286a3/Scala.gitignore
 
 dblibj/*.class
 dblibj/*.log
@@ -124,9 +124,11 @@ ocesql/.deps/
 ocesql/Makefile
 ocesql/ocesql
 stamp-h1
+
 tests/run.sh
 tests/*.log
 tests/basic
 tests/cobol_data
 tests/sql_data
 tests/sqlca
+tests/misc

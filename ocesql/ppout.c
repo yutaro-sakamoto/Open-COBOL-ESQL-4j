@@ -145,12 +145,20 @@ void sql_string(struct cb_exec_list *wk_text){
 	fprintf(outfile, "OCESQL     02  FILLER PIC X(%d) VALUE", sqllen);
 
 	int i = 0;
+	const int maximum_chars_in_single_line = 58;
 	while(i < sqllen) {
 		fprintf(outfile, i == 0
 			? "\nOCESQL     \""
 			: "\nOCESQL  &  \"");
 		int j;
-		for(j=0; j<58 && i<sqllen; ++i, ++j) {
+		for(j=0; j<maximum_chars_in_single_line && i<sqllen; ++i, ++j) {
+			//Do not split 2-bytes character into different lines
+			if(j + 1 == maximum_chars_in_single_line) {
+				unsigned char c = sqlloop[i];
+				if((0x81 <= c && c <= 0x9F) || (0xE0 <= c && 0xFC)) {
+					break;
+				}
+			}
 			fputc(sqlloop[i], outfile);
 		}
 		fprintf(outfile, i == sqllen ? "\"." : "\"");
