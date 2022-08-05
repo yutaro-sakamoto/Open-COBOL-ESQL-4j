@@ -485,7 +485,8 @@ sqlca_DEPENDENCIES = \
 	sqlca.src/prepare-execute.at
 
 misc_DEPENDENCIES = \
-	misc.src/long-sql.at
+	misc.src/long-sql.at \
+	misc.src/include.at
 
 EXTRA_DIST = $(srcdir)/package.m4 \
 	$(TESTS) \

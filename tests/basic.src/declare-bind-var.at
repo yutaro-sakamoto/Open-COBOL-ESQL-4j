@@ -338,7 +338,7 @@ AT_DATA([prog.cbl], [
 
 AT_CHECK([ocesql prog.cbl prog.cob > /dev/null])
 AT_CHECK([${EMBED_DB_INFO} prog.cob])
-AT_CHECK([cobj -I ../../ prog.cob])
+AT_CHECK([${COMPILE} -I ../../ prog.cob])
 AT_CHECK([java prog], [0],
 [0005 MIYAGI GORO            -200
 0006 FUKUSHIMA RIKURO        150

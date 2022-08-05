@@ -1,4 +1,4 @@
-AT_SETUP([select statement test])
+AT_SETUP([long sql])
 
 AT_DATA([prog.cbl], [
        IDENTIFICATION              DIVISION.

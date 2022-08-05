@@ -202,10 +202,11 @@ void ppoutputendcall(struct cb_exec_list *list){
 		return ;
 
 	memset(buff, 0, sizeof(buff));
-	if( list->period)
+	if(config_period == PERIOD_FORCE_ON || (config_period == PERIOD_DEFAULT && list->period)) {
 		com_sprintf(buff,sizeof(buff), "OCESQL%5sEND-CALL.\n", " ");
-	else
+	} else {
 		com_sprintf(buff,sizeof(buff), "OCESQL%5sEND-CALL\n", " ");
+	}
 	fputs(buff, outfile);
 	return ;
 
@@ -1880,15 +1881,10 @@ void ppbuff_incfile(struct cb_exec_list *list){
  
  		incf = fopen_or_die(filename, "r");
 
-		memset(incmsg, 0, 256);
-		sprintf(incmsg, "%s incfile start:%s", INC_START_MARK, filename);
-		com_strcpy(out,sizeof(out),incmsg);
-		outwrite();
-
 		while(1){
 			memset(incf_buff, 0, BUFFSIZE + 1);
-			fgets(incf_buff, BUFFSIZE, incf);
-			if(feof(incf)) break;
+			char* result = fgets(incf_buff, BUFFSIZE, incf);
+			if(result == NULL) break;
 
 			if(strlen(incf_buff) > MAX_LINESIZE){
 				memset(buff, 0, sizeof(buff));
@@ -1896,20 +1892,18 @@ void ppbuff_incfile(struct cb_exec_list *list){
 				printerrormsg("", lineNUM, buff);
 			}
 
+			int len = strlen(incf_buff);
+			if(len > 0 && incf_buff[len - 1] == '\n') {
+				if(len > 1 && incf_buff[len - 2] == '\r') {
+					incf_buff[len - 2] = '\0';
+				} else {
+					incf_buff[len - 1] = '\0';
+				}
+			}
 			com_strcpy(out,sizeof(out),"OCESQL");
 			com_strcat(out,sizeof(out), incf_buff + strlen("OCESQL"));
-			retcode = strlen(incf_buff);
-			len2 = strlen("OCESQL");
-			if(retcode > len2){
-				out[retcode-1] = '\0';
-			}
 			outwrite();
 		}
-
-		memset(incmsg, 0, 256);
-		sprintf(incmsg, "%s incfile end:%s",INC__END__MARK , filename);
-		com_strcpy(out,sizeof(out),incmsg);
-		outwrite();
 
 		return;
 	}
@@ -1939,8 +1933,11 @@ void ppoutput(char *ppin,char *ppout,struct cb_exec_list *head){
 
 	EOFFLG = 0;
 	if (readfile && outfile){
-		for(;EOFflg != 1;){
+		while(1){
 			com_readline(readfile, inbuff, &lineNUM, &EOFflg);
+			if(EOFflg) {
+				break;
+			}
 			if(strstr(inbuff, INC_START_MARK) != NULL ||
 			strstr(inbuff, INC__END__MARK) != NULL){
 				continue;
@@ -2026,8 +2023,13 @@ void ppoutput_incfile(char *ppin,char *ppout,struct cb_exec_list *head){
 
 	EOFFLG = 0;
 	if (readfile && outfile){
-		for(;EOFflg != 1;){
+		int after_first_read = 0;
+		while(EOFflg != 1){
+			if(after_first_read) {
+				fwrite (outbuff ,len, 1 , outfile);
+			}
 			com_readline(readfile, inbuff, &lineNUM, &EOFflg);
+			after_first_read = 1;
 			if(head){
 				if (l->startLine<= lineNUM && l->endLine>=lineNUM){
 					if (strcmp(l->commandName, "INCFILE") == 0){
@@ -2042,7 +2044,6 @@ void ppoutput_incfile(char *ppin,char *ppout,struct cb_exec_list *head){
 
 					outbuff = inbuff;
 					len = strlen(outbuff);
-					fwrite (outbuff ,len, 1 , outfile );
 
 					if (EOFflg == 1){
 						fputc('\n',outfile);
@@ -2051,7 +2052,9 @@ void ppoutput_incfile(char *ppin,char *ppout,struct cb_exec_list *head){
 				else{
 					if(lineNUM - l->endLine == 1){
 						if(strcmp(l->commandName,"INCFILE")==0){
+							fprintf(outfile, "ocesql* start_include period=%s\n", l->period ? "true" : "false");
 							ppbuff_incfile(l);
+							fprintf(outfile, "ocesql* end_include\n");
 						}
 						if (l->next != NULL)
 							l = l->next;
@@ -2068,18 +2071,14 @@ void ppoutput_incfile(char *ppin,char *ppout,struct cb_exec_list *head){
 						}
 						outbuff = inbuff;
 						len = strlen(outbuff);
-						fwrite (outbuff ,len, 1 , outfile );
 					}else{
 						outbuff = inbuff;
 						len = strlen(outbuff);
-						fwrite (outbuff ,len, 1 , outfile );
-
 					}
 				}
 			}else{
 				outbuff = inbuff;
 				len = strlen(outbuff);
-				fwrite (outbuff ,len, 1 , outfile);
 			}
 		}
 	}

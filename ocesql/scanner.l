@@ -41,6 +41,7 @@ int hostlineno = 0;
 int includelinenum = 0;
 int includeflag = 0;
 int period = 0;
+int config_period = PERIOD_DEFAULT;
 int conn_use_other_db = 0;
 int command_putother = 0;
 struct cb_exec_list *exec_list = NULL;
@@ -726,6 +727,26 @@ INT_CONSTANT {digit}+
 
 %%
 
+int parse_include_config(char* inbuff) {
+	if(strstr(inbuff, "ocesql* start_include period=true")) {
+		includeflag = 1;
+		includelinenum++;
+		config_period = PERIOD_FORCE_ON;
+		return 1;
+	} else if(strstr(inbuff, "ocesql* start_include period=false")) {
+		includeflag = 1;
+		includelinenum++;
+		config_period = PERIOD_FORCE_OFF;
+		return 1;
+	} else if(strstr(inbuff, "ocesql* end_include")) {
+		includeflag = 0;
+		config_period = PERIOD_DEFAULT;
+		return 1;
+	} else {
+		return 0;
+	}
+}
+
 static int
 yyinput(char *buff,int max_size)
 {
@@ -742,7 +763,7 @@ yyinput(char *buff,int max_size)
 				includelinenum++;
 				/* ignore line */
 				com_strcpy(buff,max_size,"\n");
-	    		return strlen(buff);
+				return strlen(buff);
 			}
 			if(includeflag){
 				includelinenum++;
@@ -751,10 +772,13 @@ yyinput(char *buff,int max_size)
 				includeflag = 0;
 				/* ignore line */
 				com_strcpy(buff,max_size,"\n");
-	    		return strlen(buff);
+				return strlen(buff);
 			}
-			
-			
+			if(parse_include_config(buff)) {
+				/* ignore line */
+				com_strcpy(buff,max_size,"\n");
+				return strlen(buff);
+			}
 		
 			bp = buff + 7;
 
