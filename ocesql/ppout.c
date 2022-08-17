@@ -202,7 +202,7 @@ void ppoutputendcall(struct cb_exec_list *list){
 		return ;
 
 	memset(buff, 0, sizeof(buff));
-	if(config_period == PERIOD_FORCE_ON || (config_period == PERIOD_DEFAULT && list->period)) {
+	if(list->period) {
 		com_sprintf(buff,sizeof(buff), "OCESQL%5sEND-CALL.\n", " ");
 	} else {
 		com_sprintf(buff,sizeof(buff), "OCESQL%5sEND-CALL\n", " ");
@@ -2052,9 +2052,7 @@ void ppoutput_incfile(char *ppin,char *ppout,struct cb_exec_list *head){
 				else{
 					if(lineNUM - l->endLine == 1){
 						if(strcmp(l->commandName,"INCFILE")==0){
-							fprintf(outfile, "ocesql* start_include period=%s\n", l->period ? "true" : "false");
 							ppbuff_incfile(l);
-							fprintf(outfile, "ocesql* end_include\n");
 						}
 						if (l->next != NULL)
 							l = l->next;

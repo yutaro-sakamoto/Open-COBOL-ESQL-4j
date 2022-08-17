@@ -210,8 +210,6 @@ extern char *errorfilename;
 extern int flag_external;
 extern char *filenameID;
 
-extern int config_period;
-
 extern struct cb_sql_list *
 cb_add_text_list (struct cb_sql_list *list, struct cb_sql_list *targetlist);
 extern struct cb_sql_list *

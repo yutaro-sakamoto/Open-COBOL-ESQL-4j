@@ -123,10 +123,6 @@ AT_DATA([prog.cbl], [
 
            EXEC SQL INCLUDE exec-connect END-EXEC.
 
-           IF 1 < 0
-               EXEC SQL INCLUDE exec-connect END-EXEC
-           END-IF.
-
            EXEC SQL
                DROP TABLE IF EXISTS EMP
            END-EXEC.

@@ -505,11 +505,7 @@ put_exec_list()
 
 	l->startLine = startlineno;
 	l->endLine = endlineno;
-	if(config_period == PERIOD_FORCE_ON || (config_period == PERIOD_DEFAULT && period != 0)) {
-		l->period = 1;
-	} else {
-		l->period = 0;
-	}
+	l->period = period;
 	l->host_list = host_reference_list;
 	l->hostreferenceCount =hostreferenceCount;
 	l->res_host_list = res_host_reference_list;
