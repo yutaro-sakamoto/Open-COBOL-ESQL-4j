@@ -119,18 +119,13 @@ jobs:
         working-directory: tests
         run: |
           cp ../.github/workflows/db-settings/embed_db_info_postgresql_9.6.sh embed_db_info.sh
-          OCDB_LOGLEVEL=debug make test
+          OCDB_LOGLEVEL=debug OCDB_LOGFILE=postgresql-9.6-test.log make test
+          cat postgresql-9.6-test.log
 
       # Run Autotest for PostgreSQL 15
       - name: Run tests for PostgreSQL 15
         working-directory: tests
         run: |
           cp ../.github/workflows/db-settings/embed_db_info_postgresql_15.sh embed_db_info.sh
-          OCDB_LOGFILE=debug make test
-
-      # upload a log file
-      - name: Upload a test log
-        uses: actions/upload-artifact@v4
-        with:
-          name: ocesql.log
-          path: /tmp/ocesql.log
+          OCDB_LOGFILE=debug OCDB_LOGFILE=tests/postgresql-15-test.log make test
+          cat postgresql-15-test.log
