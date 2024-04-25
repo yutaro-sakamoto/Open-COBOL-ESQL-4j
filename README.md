@@ -5,7 +5,7 @@ Open COBOL ESQL 4J (OCESQL 4J) consits of open-source Embedded SQL pre-compiler 
 # Supported software versions
 
 * opensource COBOL 4J
-  * 1.0.14
+  * 1.0.14 or later
 * PostgreSQL
   * 9.6
   * 15
