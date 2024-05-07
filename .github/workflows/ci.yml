@@ -21,7 +21,7 @@ jobs:
   Open-COBOL-ESQL-4j-tests:
     strategy:
       matrix:
-        os: ["ubuntu:22.04", "almalinux:9"]
+        os: ["ubuntu:24.04", "almalinux:9"]
     runs-on: ubuntu-latest
     container:
       image: ${{ matrix.os }}
@@ -60,9 +60,9 @@ jobs:
           --health-retries 5
 
     steps:
-      # Install dependencies (Ubuntu 22.04)
-      - name: Install dependencies on Ubuntu 22.04
-        if: matrix.os == 'ubuntu:22.04'
+      # Install dependencies (Ubuntu 24.04)
+      - name: Install dependencies on Ubuntu 24.04
+        if: matrix.os == 'ubuntu:24.04'
         run: |
           apt update -y
           apt install -y build-essential bison flex gettext texinfo automake autoconf curl

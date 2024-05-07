@@ -36,7 +36,7 @@ jobs:
 
     steps:
       # Install dependencies
-      - name: Install dependencies on Ubuntu 22.04
+      - name: Install dependencies on Ubuntu
         run: |
           sudo apt update -y
           sudo apt install -y build-essential bison flex gettext texinfo automake autoconf curl gcovr

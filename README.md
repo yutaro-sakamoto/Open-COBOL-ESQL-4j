@@ -10,7 +10,7 @@ Open COBOL ESQL 4J (OCESQL 4J) consits of open-source Embedded SQL pre-compiler 
   * 9.6
   * 15
 * OS
-  * Ubuntu 22.04
+  * Ubuntu 24.04
   * Almalinux 9
 * Java
   * OpenJDK 11
