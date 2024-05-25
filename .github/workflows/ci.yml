@@ -9,6 +9,9 @@ on:
   schedule:
     - cron: '0 13 * * *'
 
+permissions:
+  contents: read
+
 env:
   COBOL4J_LIB_DIR: /usr/lib/opensourcecobol4j
   COBOL4J_LIBCOBJ_JAR_PATH: /usr/lib/opensourcecobol4j/libcobj.jar
