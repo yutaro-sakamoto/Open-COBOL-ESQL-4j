@@ -1,4 +1,4 @@
-name: Coverage
+name: tests
 
 on:
   workflow_call:
@@ -14,13 +14,18 @@ env:
   CLASSPATH: ":/usr/lib/Open-COBOL-ESQL-4j/ocesql4j.jar"
 
 jobs:
-  make-coverage-report:
+  Open-COBOL-ESQL-4j-tests:
+    strategy:
+      matrix:
+        os: ["ubuntu:24.04", "almalinux:9"]
     runs-on: ubuntu-latest
-
-    # Start PostgreSQL 15 server
+    container:
+      image: ${{ matrix.os }}
+    
     services:
-      postgres15:
-        image: postgres:15
+      # Start PostgreSQL 9.6 server
+      postgres9_6:
+        image: postgres:9.6
         ports: 
           - 5432:5432
         env:
@@ -34,12 +39,36 @@ jobs:
           --health-timeout 5s
           --health-retries 5
 
+      # Start PostgreSQL 15 server
+      postgres15:
+        image: postgres:15
+        ports: 
+          - 5433:5432
+        env:
+          POSTGRES_PASSWORD: password
+          POSTGRES_USER: main_user
+          POSTGRES_DB: testdb
+          POSTGRES_HOST_AUTH_METHOD: 'trust'
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
-      # Install dependencies
-      - name: Install dependencies on Ubuntu
+      # Install dependencies (Ubuntu 24.04)
+      - name: Install dependencies on Ubuntu 24.04
+        if: matrix.os == 'ubuntu:24.04'
         run: |
-          sudo apt update -y
-          sudo apt install -y build-essential bison flex gettext texinfo automake autoconf curl gcovr
+          apt update -y
+          apt install -y build-essential bison flex gettext texinfo automake autoconf curl
+
+      # Install dependencies (Almalinux 9)
+      - name: Install dependencies on AlmaLinux 9
+        if: matrix.os == 'almalinux:9'
+        run: |
+          dnf -y update
+          dnf install -y gcc gcc-c++ make bison flex automake autoconf diffutils gettext
 
       # Setup JDK
       - name: Setup JDK
@@ -71,35 +100,38 @@ jobs:
         run: |
           ./configure --prefix=/usr/ CFLAGS='-Werror'
           make
-          sudo make install
+          make install
 
       # Build and Install Open COBOL ESQL 4J
       - name: Install Open COBOL ESQL 4J
         run: |
           cp "$COBOL4J_LIBCOBJ_JAR_PATH" dblibj/lib
-          sh configure CFLAGS='-fprofile-arcs -ftest-coverage -Werror' --prefix=/usr/
+          sh configure --prefix=/usr/ CFLAGS='-Werror'
           make
-          sudo make install
+          make install
+
+      # Run Autotest for PostgreSQL 9.6
+      - name: Run tests for PostgreSQL 9.6
+        working-directory: tests
+        run: |
+          cp ../.github/workflows/db-settings/embed_db_info_postgresql_9.6.sh embed_db_info.sh
+          OCDB_LOGLEVEL=debug make test
 
       # Run Autotest for PostgreSQL 15
       - name: Run tests for PostgreSQL 15
         working-directory: tests
         run: |
-          cp ../.github/workflows/db-settings/embed_db_info_postgresql_15_coverage.sh embed_db_info.sh
-          make test
+          cp ../.github/workflows/db-settings/embed_db_info_postgresql_15.sh embed_db_info.sh
+          OCDB_LOGFILE=debug make test
 
-      # Make a coverage report
-      - name: Make a coverage report
-        working-directory: ocesql
+      # Define the archive name
+      - name: Define the archive name
         run: |
-          gcov -l ./*.gcda
-          gcovr -r . --html -o report.html
-          mkdir coverage-report
-          cp ./*.gcno ./*.gcda ./*.gcov report.html coverage-report
+          echo "OCESQL_ARCHIVE_NAME=ocesql-${{ matrix.os }}" | sed s/:/-/g >> "$GITHUB_ENV"
 
-      # Upload a coverage report
-      - name: Archive a coverage report
+      # upload a log file
+      - name: Upload a test log
         uses: actions/upload-artifact@v4
         with:
-          name: code-coverage-report
-          path: ocesql/coverage-report/
+          name: ${{ env.OCESQL_ARCHIVE_NAME }}.log
+          path: /tmp/ocesql.log

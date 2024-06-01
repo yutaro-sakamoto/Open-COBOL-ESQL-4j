@@ -1,10 +1,7 @@
 name: doc
 
 on:
-  push:
-  pull_request:
-    types: [opened, reopened, review_requested, synchronize]
-  workflow_dispatch:
+  workflow_call:
 
 permissions:
   contents: read
@@ -63,7 +60,7 @@ jobs:
       # Build documentation
       - name: Build documentation
         run: |
-          cp $COBOL4J_LIBCOBJ_JAR_PATH dblibj/lib
+          cp "$COBOL4J_LIBCOBJ_JAR_PATH" dblibj/lib
           cd dblibj/
           sbt doc
 
