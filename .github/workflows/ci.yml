@@ -18,7 +18,7 @@ jobs:
 
   test:
     needs: check-workflows
-    uses: ./.github/workflows/test.yml  
+    uses: ./.github/workflows/test.yml
   
   coverage:
     needs: check-workflows
@@ -34,3 +34,7 @@ jobs:
     needs: check-workflows
     if: github.event_name != 'schedule'
     uses: ./.github/workflows/doc.yml
+    
+  windows-build:
+    needs: check-workflows
+    uses: ./.github/workflows/windows-build.yml

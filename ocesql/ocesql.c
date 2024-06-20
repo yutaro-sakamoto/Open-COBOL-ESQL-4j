@@ -283,7 +283,7 @@ void version(void) {
 
 void print_version(void) {
   version();
-  exit(-1);
+  exit(0);
 }
 
 void print_usage(void) {
@@ -297,7 +297,7 @@ void print_usage(void) {
   printf("usage\n");
   printf("  -v, --version              show version.\n");
   printf("  -h, --help                 show this usage.\n");
-  exit(-1);
+  exit(0);
 }
 
 int main(int argc, char *argv[]) {
