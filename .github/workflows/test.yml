@@ -68,7 +68,7 @@ jobs:
         if: matrix.os == 'almalinux:9'
         run: |
           dnf -y update
-          dnf install -y gcc gcc-c++ make bison flex automake autoconf diffutils gettext
+          dnf install -y gcc make bison flex automake autoconf diffutils gettext
 
       # Setup JDK
       - name: Setup JDK
