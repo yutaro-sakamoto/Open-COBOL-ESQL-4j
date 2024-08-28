@@ -14962,7 +14962,7 @@ then :
 fi
 
 
-ac_config_files="$ac_config_files Makefile ocesql/Makefile tests/Makefile dblibj/Makefile"
+ac_config_files="$ac_config_files Makefile ocesql4j/Makefile tests/Makefile dblibj/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -15979,7 +15979,7 @@ do
     "depfiles") CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
     "libtool") CONFIG_COMMANDS="$CONFIG_COMMANDS libtool" ;;
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
-    "ocesql/Makefile") CONFIG_FILES="$CONFIG_FILES ocesql/Makefile" ;;
+    "ocesql4j/Makefile") CONFIG_FILES="$CONFIG_FILES ocesql4j/Makefile" ;;
     "tests/Makefile") CONFIG_FILES="$CONFIG_FILES tests/Makefile" ;;
     "dblibj/Makefile") CONFIG_FILES="$CONFIG_FILES dblibj/Makefile" ;;
 

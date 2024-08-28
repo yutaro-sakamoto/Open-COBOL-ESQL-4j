@@ -113,11 +113,11 @@ config.h
 config.log
 config.status
 libtool
-ocesql/.deps/
-ocesql/Makefile
-ocesql/errorfile.o
-ocesql/ocesql
-ocesql/*.o
+ocesql4j/.deps/
+ocesql4j/Makefile
+ocesql4j/errorfile.o
+ocesql4j/ocesql
+ocesql4j/*.o
 stamp-h1
 tests/*.log
 tests/*.dir

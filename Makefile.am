@@ -1,8 +1,7 @@
 if DISABLE_OCESQL
-  OCESQL = 
+  OCESQL4J = 
 else
-  OCESQL = ocesql4j
+  OCESQL4J = ocesql4j
 endif
 
-#SUBDIRS = dblib $(OCESQL)
-SUBDIRS = $(OCESQL) tests dblibj
+SUBDIRS = $(OCESQL4J) tests dblibj

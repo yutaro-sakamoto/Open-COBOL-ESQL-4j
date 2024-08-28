@@ -2,8 +2,8 @@
 
 clang-format -i \
 errorfile.c \
-ocesql.c \
-ocesql.h \
+ocesql4j.c \
+ocesql4j.h \
 ocesqlutil.c \
 ocesqlutil.h \
 ppout.c

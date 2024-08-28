@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301 USA
  */
 
-#include "ocesql.h"
+#include "ocesql4j.h"
 #include "ocesqlutil.h"
 #include <stdio.h>
 #include <stdlib.h>

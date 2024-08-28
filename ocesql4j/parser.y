@@ -25,7 +25,7 @@
 #include <string.h>
 #include <ctype.h>
 
-#include "ocesql.h"
+#include "ocesql4j.h"
 #include "ocesqlutil.h"
 
 	static void put_exec_list();

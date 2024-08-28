@@ -30,7 +30,7 @@
 #include <unistd.h>
 #endif
 
-#include "ocesql.h"
+#include "ocesql4j.h"
 
 char *com_strdup(const char *cid) {
 #ifdef _WIN32

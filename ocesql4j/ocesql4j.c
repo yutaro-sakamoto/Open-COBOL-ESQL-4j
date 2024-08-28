@@ -22,7 +22,7 @@
 #include <sys/types.h>
 
 #include "config.h"
-#include "ocesql.h"
+#include "ocesql4j.h"
 #include "ocesqlutil.h"
 
 int processid = 0;
@@ -288,7 +288,7 @@ void print_version(void) {
 void print_usage(void) {
   version();
   printf("\n");
-  printf("Usage: ocesql [options] SOURCE [DESTFILE] [LOGFILE]\n");
+  printf("Usage: ocesql4j [options] SOURCE [DESTFILE] [LOGFILE]\n");
   printf("\n");
   printf("options\n");
   printf("      --inc=include_dir      set INCLUDE FILE directory path.\n");
