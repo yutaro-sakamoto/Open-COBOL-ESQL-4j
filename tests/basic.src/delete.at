@@ -9,16 +9,16 @@ AT_DATA([prog.cbl], [
       ******************************************************************
        WORKING-STORAGE             SECTION.
        01  TEST-DATA.
-         03 FILLER       PIC X(28) VALUE "0001–kŠC@‘¾˜Y          0400".
-         03 FILLER       PIC X(28) VALUE "0002ÂX@ŽŸ˜Y          0350".
-         03 FILLER       PIC X(28) VALUE "0003H“c@ŽO˜Y          0300".
-         03 FILLER       PIC X(28) VALUE "0004ŠâŽè@Žl˜Y          025p".
-         03 FILLER       PIC X(28) VALUE "0005‹{é@ŒÜ˜Y          020p".
-         03 FILLER       PIC X(28) VALUE "0006•Ÿ“‡@˜Z˜Y          0150".
-         03 FILLER       PIC X(28) VALUE "0007“È–Ø@Žµ˜Y          010p".
-         03 FILLER       PIC X(28) VALUE "0008ˆïé@”ª˜Y          0050".
-         03 FILLER       PIC X(28) VALUE "0009ŒQ”n@‹ã˜Y          020p".
-         03 FILLER       PIC X(28) VALUE "0010é‹Ê@\˜Y          0350".
+         03 FILLER       PIC X(28) VALUE "0001ï¿½kï¿½Cï¿½@ï¿½ï¿½ï¿½Y          0400".
+         03 FILLER       PIC X(28) VALUE "0002ï¿½ÂXï¿½@ï¿½ï¿½ï¿½Y          0350".
+         03 FILLER       PIC X(28) VALUE "0003ï¿½Hï¿½cï¿½@ï¿½Oï¿½Y          0300".
+         03 FILLER       PIC X(28) VALUE "0004ï¿½ï¿½ï¿½@ï¿½lï¿½Y          025p".
+         03 FILLER       PIC X(28) VALUE "0005ï¿½{ï¿½ï¿½@ï¿½Ü˜Y          020p".
+         03 FILLER       PIC X(28) VALUE "0006ï¿½ï¿½ï¿½ï¿½ï¿½@ï¿½Zï¿½Y          0150".
+         03 FILLER       PIC X(28) VALUE "0007ï¿½È–Ø@ï¿½ï¿½ï¿½Y          010p".
+         03 FILLER       PIC X(28) VALUE "0008ï¿½ï¿½ï¿½@ï¿½ï¿½ï¿½Y          0050".
+         03 FILLER       PIC X(28) VALUE "0009ï¿½Qï¿½nï¿½@ï¿½ï¿½Y          020p".
+         03 FILLER       PIC X(28) VALUE "0010ï¿½ï¿½Ê@ï¿½\ï¿½Y          0350".
 
        01  TEST-DATA-R   REDEFINES TEST-DATA.
          03  TEST-TBL    OCCURS  10.
@@ -180,7 +180,7 @@ AT_DATA([prog.cbl], [
 
 ])
 AT_CHECK([${EMBED_DB_INFO} prog.cbl])
-AT_CHECK([ocesql prog.cbl prog.cob], [0],
+AT_CHECK([ocesql4j prog.cbl prog.cob], [0],
 [precompile start: prog.cbl
 =======================================================
               LIST OF CALLED DB Library API            @&t@
@@ -204,11 +204,11 @@ AT_CHECK([${COMPILE_MODULE} prog.cob])
 AT_CHECK([${RUN_MODULE} prog], [0],
 [0001 <log> success test_return_code
 0002 <log> success test_return_code
-0003 <log> success fetch_record +0001, –kŠC@‘¾˜Y          , +0400
-0004 <log> success fetch_record +0002, ÂX@ŽŸ˜Y          , +0350
-0005 <log> success fetch_record +0003, H“c@ŽO˜Y          , +0300
-0006 <log> success fetch_record +0004, ŠâŽè@Žl˜Y          , -0250
-0007 <log> success fetch_record +0005, ‹{é@ŒÜ˜Y          , -0200
+0003 <log> success fetch_record +0001, ï¿½kï¿½Cï¿½@ï¿½ï¿½ï¿½Y          , +0400
+0004 <log> success fetch_record +0002, ï¿½ÂXï¿½@ï¿½ï¿½ï¿½Y          , +0350
+0005 <log> success fetch_record +0003, ï¿½Hï¿½cï¿½@ï¿½Oï¿½Y          , +0300
+0006 <log> success fetch_record +0004, ï¿½ï¿½ï¿½@ï¿½lï¿½Y          , -0250
+0007 <log> success fetch_record +0005, ï¿½{ï¿½ï¿½@ï¿½Ü˜Y          , -0200
 ])
 
 AT_CLEANUP

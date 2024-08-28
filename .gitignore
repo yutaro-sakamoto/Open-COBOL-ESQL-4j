@@ -116,7 +116,7 @@ libtool
 ocesql4j/.deps/
 ocesql4j/Makefile
 ocesql4j/errorfile.o
-ocesql4j/ocesql
+ocesql4j/ocesql4j
 ocesql4j/*.o
 stamp-h1
 tests/*.log
