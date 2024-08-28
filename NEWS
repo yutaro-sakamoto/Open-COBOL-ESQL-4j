@@ -1,5 +1,23 @@
 NEWS - user visible changes				-*- outline -*-
 
+* Open COBOL ESQL 4J 1.1.0
+
+** New Features
+    (1) Support Windows
+
+** Optimized
+    (1) Implemente caches for prepared statements
+
+** Bug Fixes
+    (1) Fix dblibj (#53)
+    (2) Fix the installation issue in Almalinux 9
+
+** Miscellaneous
+    (1) Simplify the installation process
+    (2) Support Ubuntu 24.04
+
+-----------------------------------------------------------------------
+
 * Open COBOL ESQL 4J 1.0.3
 
 ** New Features

@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [1.1.0] - 2024-08-30
+
+### Added
+- Support Windows (#82)
+
+### Optimized
+- Implemente caches for prepared statements (#58)
+
+### Fix
+- Fix dblibj (#53)
+- Fix the installation issue in Almalinux 9 (#84)
+
+### Miscellaneous
+- Simplify the installation process (#57)
+- Support Ubuntu 24.04 (#56)
+
 ## [1.0.3] - 2023-08-31
 
 ### Added
