@@ -46,13 +46,13 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: zulu
-          java-version: 11
+          java-version: 21
 
       # Setup sbt
       - name: Setup sbt
-        uses: olafurpg/setup-scala@v14
-        with:
-          java-version: zulu@1.11
+        run: |
+          curl -fL https://github.com/coursier/coursier/releases/latest/download/cs-x86_64-pc-linux.gz | gzip -d > cs && chmod +x cs && echo Y | ./cs setup
+          echo PATH="$PATH:/home/runner/.local/share/coursier/bin" >> "$GITHUB_ENV"
 
       # Checkout
       - name: Checkout Open-COBOL-ESQL-4j
