@@ -21,7 +21,6 @@
 #include <stdlib.h>
 #include <sys/types.h>
 
-#include "config.h"
 #include "ocesql.h"
 #include "ocesqlutil.h"
 
@@ -275,7 +274,7 @@ char *cb_get_env(char *filename, int num) {
 
 void version(void) {
   printf("Open Cobol ESQL 4J\n");
-  printf("Version %s\n", PACKAGE_VERSION);
+  printf("Version 1.1.0\n");
   printf("\n");
   printf("Tokyo System House Co., Ltd. <opencobol@tsh-world.co.jp>\n");
 }
