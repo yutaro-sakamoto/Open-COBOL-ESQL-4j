@@ -274,9 +274,7 @@ char *cb_get_env(char *filename, int num) {
 
 void version(void) {
   printf("Open Cobol ESQL 4J\n");
-  printf("Version 1.0.2\n");
-  printf("\n");
-  printf("April 30, 2023\n");
+  printf("Version 1.1.0\n");
   printf("\n");
   printf("Tokyo System House Co., Ltd. <opencobol@tsh-world.co.jp>\n");
 }
