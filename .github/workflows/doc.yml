@@ -11,6 +11,7 @@ env:
   COBOL4J_LIBCOBJ_JAR_PATH: /usr/lib/opensourcecobol4j/libcobj.jar
   OCESQL4J_LIB_DIR: /usr/lib/Open-COBOL-ESQL-4j
   OCESQL4J_OCESQL4J_JAR_PATH: /usr/lib/Open-COBOL-ESQL-4j/ocesql4j.jar
+  OCESQL4J_POSTGRESQL_JAR_PATH: /usr/lib/Open-COBOL-ESQL-4j/postgresql.jar
   CLASSPATH: ":/usr/lib/Open-COBOL-ESQL-4j/ocesql4j.jar"
 
 
@@ -61,6 +62,9 @@ jobs:
       - name: Build documentation
         run: |
           cp "$COBOL4J_LIBCOBJ_JAR_PATH" dblibj/lib
+          sudo mkdir -p "$OCESQL4J_LIB_DIR"
+          sudo curl -L -o "$OCESQL4J_POSTGRESQL_JAR_PATH" https://jdbc.postgresql.org/download/postgresql-42.2.24.jre6.jar
+          sudo cp "$OCESQL4J_POSTGRESQL_JAR_PATH" dblibj/lib
           cd dblibj/
           sbt doc
 
