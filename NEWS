@@ -9,12 +9,10 @@ NEWS - user visible changes				-*- outline -*-
     (1) Implemente caches for prepared statements
 
 ** Bug Fixes
-    (1) Fix dblibj (#53)
-    (2) Fix the installation issue in Almalinux 9
+    (1) Fix prepared statements
 
 ** Miscellaneous
-    (1) Simplify the installation process
-    (2) Support Ubuntu 24.04
+    (1) Support Ubuntu 24.04
 
 -----------------------------------------------------------------------
 

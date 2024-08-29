@@ -13,11 +13,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Implemente caches for prepared statements (#58)
 
 ### Fix
-- Fix dblibj (#53)
-- Fix the installation issue in Almalinux 9 (#84)
+- Fix prepaed statements (#53)
 
 ### Miscellaneous
-- Simplify the installation process (#57)
 - Support Ubuntu 24.04 (#56)
 
 ## [1.0.3] - 2023-08-31
