@@ -60,6 +60,9 @@ jobs:
       run: |
         cd dblibj
         copy ../opensourcecobol4j/libcobj/app/build/libs/libcobj.jar lib
+        mkdir C:\ocesql4j\lib
+        curl -L -o C:\ocesql4j\lib\postgresql.jar https://jdbc.postgresql.org/download/postgresql-42.2.24.jar
+        copy C:\ocesql4j\lib\postgresql.jar lib
         sbt assembly
     
     - name: Restore NuGet packages of ocesql4j
@@ -77,14 +80,14 @@ jobs:
       working-directory: sample
       run: |
         $env:PATH+=";C:\opensourcecobol4j\bin;C:\ocesql4j\bin;C:\ocesql4j\config"
-        $env:CLASSPATH="C:\opensourcecobol4j\lib\libcobj.jar;C:\ocesql4j\lib\ocesql4j.jar"
+        $env:CLASSPATH=".;C:\opensourcecobol4j\lib\libcobj.jar;C:\ocesql4j\lib\ocesql4j.jar;C:\ocesql4j\lib\postgresql.jar"
         copy ../copy/sqlca.cbl .
         ocesql FETCHTBL.cbl  FETCHTBL.cob
         ocesql INSERTTBL.cbl INSERTTBL.cob
         cobj INSERTTBL.cob
         cobj FETCHTBL.cob
-        java INSERTTBL.java
-        java FETCHTBL.java > sample-result
+        java INSERTTBL
+        java FETCHTBL > sample-result
 
     - name: Compare result of test
       working-directory: sample
