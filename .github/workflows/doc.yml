@@ -63,7 +63,7 @@ jobs:
         run: |
           cp "$COBOL4J_LIBCOBJ_JAR_PATH" dblibj/lib
           sudo mkdir -p "$OCESQL4J_LIB_DIR"
-          sudo curl -L -o "$OCESQL4J_POSTGRESQL_JAR_PATH" https://jdbc.postgresql.org/download/postgresql-42.2.24.jre6.jar
+          sudo curl -L -o "$OCESQL4J_POSTGRESQL_JAR_PATH" https://jdbc.postgresql.org/download/postgresql-42.2.24.jar
           sudo cp "$OCESQL4J_POSTGRESQL_JAR_PATH" dblibj/lib
           cd dblibj/
           sbt doc
