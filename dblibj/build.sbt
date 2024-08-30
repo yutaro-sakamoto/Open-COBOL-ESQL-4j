@@ -6,7 +6,6 @@ scalaVersion := "2.13.14"
 
 libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest" % "3.0.8" % Test,
-  "org.postgresql" % "postgresql" % "42.2.5"
 )
 
 assemblyJarName := "ocesql4j.jar"
