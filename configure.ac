@@ -2,13 +2,12 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([Open COBOL ESQL 4J], [1.0.3], [opencobol@tsh-world.co.jp])
+AC_INIT([Open COBOL ESQL 4J], [1.1.0], [opencobol@tsh-world.co.jp])
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE
 
 # Checks for programs.
-AC_PROG_CXX
 AC_PROG_AWK
 AC_PROG_CC
 AC_PROG_CPP

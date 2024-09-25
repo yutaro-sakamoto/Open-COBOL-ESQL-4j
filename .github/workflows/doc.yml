@@ -1,4 +1,4 @@
-name: Coverage
+name: doc
 
 on:
   workflow_call:
@@ -10,37 +10,21 @@ env:
   COBOL4J_LIB_DIR: /usr/lib/opensourcecobol4j
   COBOL4J_LIBCOBJ_JAR_PATH: /usr/lib/opensourcecobol4j/libcobj.jar
   OCESQL4J_LIB_DIR: /usr/lib/Open-COBOL-ESQL-4j
-  OCESQL4J_POSTGRESQL_JAR_PATH: /usr/lib/Open-COBOL-ESQL-4j/postgresql.jar
   OCESQL4J_OCESQL4J_JAR_PATH: /usr/lib/Open-COBOL-ESQL-4j/ocesql4j.jar
+  OCESQL4J_POSTGRESQL_JAR_PATH: /usr/lib/Open-COBOL-ESQL-4j/postgresql.jar
   CLASSPATH: ":/usr/lib/Open-COBOL-ESQL-4j/ocesql4j.jar"
 
+
 jobs:
-  make-coverage-report:
+  doc:
     runs-on: ubuntu-latest
-
-    # Start PostgreSQL 15 server
-    services:
-      postgres15:
-        image: postgres:15
-        ports: 
-          - 5432:5432
-        env:
-          POSTGRES_PASSWORD: password
-          POSTGRES_USER: main_user
-          POSTGRES_DB: testdb
-          POSTGRES_HOST_AUTH_METHOD: 'trust'
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
+    
     steps:
       # Install dependencies
       - name: Install dependencies on Ubuntu
         run: |
           sudo apt update -y
-          sudo apt install -y build-essential bison flex gettext texinfo automake autoconf curl gcovr
+          sudo apt install -y build-essential bison flex gettext texinfo automake autoconf curl
 
       # Setup JDK
       - name: Setup JDK
@@ -55,10 +39,6 @@ jobs:
           curl -fL https://github.com/coursier/coursier/releases/latest/download/cs-x86_64-pc-linux.gz | gzip -d > cs && chmod +x cs && echo Y | ./cs setup
           echo PATH="$PATH:/home/runner/.local/share/coursier/bin" >> "$GITHUB_ENV"
 
-      # Checkout
-      - name: Checkout Open-COBOL-ESQL-4j
-        uses: actions/checkout@v4
-          
       # Checkout opensource COBOL 4J
       - name: Checkout opensourcecobol 4J
         uses: actions/checkout@v4
@@ -74,36 +54,23 @@ jobs:
           make
           sudo make install
 
-      # Build and Install Open COBOL ESQL 4J
-      - name: Install Open COBOL ESQL 4J
+      # Checkout
+      - name: Checkout Open-COBOL-ESQL-4j
+        uses: actions/checkout@v4
+
+      # Build documentation
+      - name: Build documentation
         run: |
           cp "$COBOL4J_LIBCOBJ_JAR_PATH" dblibj/lib
           sudo mkdir -p "$OCESQL4J_LIB_DIR"
           sudo curl -L -o "$OCESQL4J_POSTGRESQL_JAR_PATH" https://jdbc.postgresql.org/download/postgresql-42.2.24.jar
           sudo cp "$OCESQL4J_POSTGRESQL_JAR_PATH" dblibj/lib
-          sh configure CFLAGS='-fprofile-arcs -ftest-coverage -Werror' --prefix=/usr/
-          make
-          sudo make install
+          cd dblibj/
+          sbt doc
 
-      # Run Autotest for PostgreSQL 15
-      - name: Run tests for PostgreSQL 15
-        working-directory: tests
-        run: |
-          cp ../.github/workflows/db-settings/embed_db_info_postgresql_15_coverage.sh embed_db_info.sh
-          make test
-
-      # Make a coverage report
-      - name: Make a coverage report
-        working-directory: ocesql
-        run: |
-          gcov -l ./*.gcda
-          gcovr -r . --html -o report.html
-          mkdir coverage-report
-          cp ./*.gcno ./*.gcda ./*.gcov report.html coverage-report
-
-      # Upload a coverage report
-      - name: Archive a coverage report
+      # Archive documentation 
+      - name: Archive documentation
         uses: actions/upload-artifact@v4
         with:
-          name: code-coverage-report
-          path: ocesql/coverage-report/
+          name: dblibj-docs 
+          path: dblibj/target/scala-2.13/api
