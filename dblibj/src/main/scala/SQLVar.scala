@@ -478,7 +478,7 @@ object SQLVar {
     val addr = v.addr.getOrElse(nullDataStorage)
     val addrDataPart = addr.getSubDataStorage(OCDB_VARCHAR_HEADER_BYTE);
     var lenSize = 0;
-    for(i <- 0 to OCDB_VARCHAR_HEADER_BYTE - 1) {
+    for (i <- 0 to OCDB_VARCHAR_HEADER_BYTE - 1) {
       lenSize = lenSize * 256 + addr.getByte(i)
     }
     val data = new CobolDataStorage(lenSize + 1)
@@ -487,7 +487,10 @@ object SQLVar {
     realData.memset(0.toByte, lenSize + 1)
     data.memcpy(addrDataPart, lenSize)
     realData.memcpy(addrDataPart, lenSize)
-    v.setRealData(Some(realData)).setData(Some(data)).setRealDataLength(lenSize).setLength(lenSize)
+    v.setRealData(Some(realData))
+      .setData(Some(data))
+      .setRealDataLength(lenSize)
+      .setLength(lenSize)
   }
 
   private def createRealDataJapaneseVarying(v: SQLVar): SQLVar = v
