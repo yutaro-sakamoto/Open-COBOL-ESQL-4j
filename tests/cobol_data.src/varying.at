@@ -70,12 +70,13 @@ AT_DATA([prog.cbl], [
       ******************************************************************
 
       *    SERVER
-           MOVE  "testdb@oc4j_db:5432"
+           MOVE  "<|DB_NAME|>@<|DB_HOST|>:<|DB_PORT|>"
              TO DBNAME.
-           MOVE  "main_user"
+           MOVE  "<|DB_USER|>"
              TO USERNAME.
-           MOVE  "password"
+           MOVE  "<|DB_PASSWORD|>"
              TO PASSWD.
+
            EXEC SQL
                CONNECT :USERNAME IDENTIFIED BY :PASSWD USING :DBNAME 
            END-EXEC.
@@ -269,12 +270,13 @@ AT_DATA([prog.cbl], [
       ******************************************************************
 
       *    SERVER
-           MOVE  "testdb@oc4j_db:5432"
+           MOVE  "<|DB_NAME|>@<|DB_HOST|>:<|DB_PORT|>"
              TO DBNAME.
-           MOVE  "main_user"
+           MOVE  "<|DB_USER|>"
              TO USERNAME.
-           MOVE  "password"
+           MOVE  "<|DB_PASSWORD|>"
              TO PASSWD.
+
            EXEC SQL
                CONNECT :USERNAME IDENTIFIED BY :PASSWD USING :DBNAME 
            END-EXEC.
