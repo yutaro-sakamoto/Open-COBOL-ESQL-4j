@@ -476,7 +476,8 @@ cobol_data_DEPENDENCIES = \
 	cobol_data.src/numeric_signed_v.at \
 	cobol_data.src/numeric_v.at \
 	cobol_data.src/comp3.at \
-	cobol_data.src/comp3_signed.at
+	cobol_data.src/comp3_signed.at \
+	cobol_data.src/varying.at
 
 sql_data_DEPENDENCIES = \
 	sql_data.src/sql_type.at
