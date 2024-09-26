@@ -479,7 +479,7 @@ object SQLVar {
     val addrDataPart = addr.getSubDataStorage(OCDB_VARCHAR_HEADER_BYTE);
     var lenSize = 0;
     for (i <- 0 to OCDB_VARCHAR_HEADER_BYTE - 1) {
-      lenSize = lenSize * 256 + addr.getByte(i)
+      lenSize = lenSize * 256 + java.lang.Byte.toUnsignedInt(addr.getByte(i))
     }
     val data = new CobolDataStorage(lenSize + 1)
     val realData = new CobolDataStorage(lenSize + 1)
