@@ -1,0 +1,39 @@
+name: Publish artifacts to GitHub Packages
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  check-workflows:
+    uses: ./.github/workflows/check-workflows.yml
+
+  build-artifacts:
+    needs: check-workflows
+    uses: ./.github/workflows/windows-build.yml
+    with:
+      upload-artifacts: true
+
+  publish-artifacts:
+    needs: check-workflows
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Download ocesql.exe
+        uses: actions/download-artifact@v4
+        with:
+          name: ocesql.exe
+
+      - name: Download ocesql.exe
+        uses: actions/download-artifact@v4
+        with:
+          name: ocesql4j.jar
+
+      - name: Publish artifacts
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload ${{ github.ref }} ocesql.exe --clobber
+          gh release upload ${{ github.ref }} ocesql4j.jar --clobber

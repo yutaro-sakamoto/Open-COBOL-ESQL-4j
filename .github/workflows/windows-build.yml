@@ -2,6 +2,11 @@ name: Windows build
 
 on:
   workflow_call:
+    inputs:
+      upload-artifacts:
+        description: 'Upload artifacts'
+        required: true
+        type: boolean
 
 permissions:
   contents: read
@@ -95,3 +100,17 @@ jobs:
         fc /b .\sample-result ..\win\sample-correct > test-result
         findstr "no differences encountered" test-result
       shell: cmd
+
+    - name: Upload ocesql.exe
+      if: ${{ github.event.inputs.upload-artifacts }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: ocesql.exe
+        path: win\x64\Release\ocesql.exe
+
+    - name: Upload ocesql.exe
+      if: ${{ github.event.inputs.upload-artifacts }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: ocesql4j.jar
+        path: dblibj\target\scala-2.13\ocesql4j.jar

@@ -38,3 +38,5 @@ jobs:
   windows-build:
     needs: check-workflows
     uses: ./.github/workflows/windows-build.yml
+    with:
+      upload-artifacts: false
