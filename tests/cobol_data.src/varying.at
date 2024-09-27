@@ -54,6 +54,7 @@ AT_DATA([prog.cbl], [
       *    PERFORM DISPLAY-TEST-RESULT.
            PERFORM UNTIL SQLCODE NOT = ZERO
               DISPLAY EMP-NAME-ARR
+              MOVE IDX TO EMP-NAME-LEN
               EXEC SQL 
                   FETCH C1 INTO :EMP-NUM1, :EMP-NAME, :EMP-NUM2
               END-EXEC
@@ -193,15 +194,25 @@ Generate:ROLLBACK
 AT_CHECK([${COMPILE_MODULE} prog.cob])
 AT_CHECK([${RUN_MODULE} prog], [0],
 [A         @&t@
++00000001
 AB        @&t@
++00000002
 ABC       @&t@
++00000003
 ABCD      @&t@
++00000004
 ABCDE     @&t@
++00000005
 ABCDEF    @&t@
++00000006
 ABCDEFG   @&t@
++00000007
 ABCDEFGH  @&t@
++00000008
 ABCDEFGHI @&t@
++00000009
 ABCDEFGHIJ
++00000010
 ])
 
 AT_DATA([prog.cbl], [
