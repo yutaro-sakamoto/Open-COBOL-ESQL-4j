@@ -1,5 +1,13 @@
 NEWS - user visible changes				-*- outline -*-
 
+* Open COBOL ESQL 4J 1.1.1
+
+** New Features
+    (1) Implement variable length character strings.
+      (a) For example, `01 WS-VAR PIC X(10) VARYING.`
+
+-----------------------------------------------------------------------
+
 * Open COBOL ESQL 4J 1.1.0
 
 ** New Features
