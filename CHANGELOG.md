@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [1.1.1] - 2024-09-30
+
+### Added
 - Implement variable length character strings (#94)
   - For example, `01 WS-VAR PIC X(10) VARYING.`
 
