@@ -41,11 +41,11 @@ After you complete the installation procedure described in [Installation guides 
 In addtion, execute the following command to prepare postgresql jdbc driver.
 
 ```sh
-# Move to the root directory of Open-COBOL-ESQL-4J
-cd Open-COBOL-ESQL-4J/
-mkdir -p /usr/lib/Open-COBOL-ESQL-4J/
-curl -L -o /usr/lib/Open-COBOL-ESQL-4J/postgresql.jar https://jdbc.postgresql.org/download/postgresql-42.2.24.jar
-cp /usr/lib/Open-COBOL-ESQL-4J/postgresql.jar dblibj/lib
+# Move to the root directory of Open-COBOL-ESQL-4j
+cd Open-COBOL-ESQL-4j/
+mkdir -p /usr/lib/Open-COBOL-ESQL-4j/
+curl -L -o /usr/lib/Open-COBOL-ESQL-4j/postgresql.jar https://jdbc.postgresql.org/download/postgresql-42.2.24.jar
+cp /usr/lib/Open-COBOL-ESQL-4j/postgresql.jar dblibj/lib
 ```
 
 ### sbt
@@ -62,10 +62,10 @@ make
 make install
 ```
 
-Then, add `/usr/lib/Open-COBOL-ESQL-4J/ocesql4j.jar` and `/usr/lib/Open-COBOL-ESQL-4J/postgresql.jar` to $CLASSPATH.
+Then, add `/usr/lib/Open-COBOL-ESQL-4j/ocesql4j.jar` and `/usr/lib/Open-COBOL-ESQL-4j/postgresql.jar` to $CLASSPATH.
 
 ```sh
-export CLASSPATH="$CLASSPATH":/usr/lib/Open-COBOL-ESQL-4J/ocesql4j.jar:/usr/lib/Open-COBOL-ESQL-4J/postgresql.jar
+export CLASSPATH="$CLASSPATH":/usr/lib/Open-COBOL-ESQL-4j/ocesql4j.jar:/usr/lib/Open-COBOL-ESQL-4j/postgresql.jar
 ```
 
 ## Installation (Windows)
