@@ -188,6 +188,7 @@ Generate:OCESQLExec
 Generate:OCESQLExec
 Generate:OCESQLExecParams
 Generate:COMMIT
+Generate:OCESQLDisconnect
 =======================================================
 ])
 AT_CHECK([${COMPILE_MODULE} prog.cob])
