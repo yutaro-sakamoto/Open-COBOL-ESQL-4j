@@ -2002,36 +2002,27 @@ void ppoutput(char *ppin, char *ppout, struct cb_exec_list *head) {
           len = strlen(outbuff);
           fwrite(outbuff, len, 1, outfile);
 
+          if (strstr(inbuff, "\n") == NULL){
+            fputc('\n', outfile);
+          }
           if (EOFflg == 1) {
             fputc('\n', outfile);
           }
-        } else {
-          if (lineNUM - l->endLine == 1) {
+
+          if (lineNUM == l->endLine){
             if (strcmp(l->commandName, "WORKING_END")) {
               ppbuff(l);
             }
-            if (l->next != NULL)
-              l = l->next;
 
-            if (l->startLine <= lineNUM && l->endLine >= lineNUM &&
-                (strcmp(l->commandName, "WORKING_BEGIN") != 0 &&
-                 strcmp(l->commandName, "WORKING_END") != 0)) {
-              inbuff[0] = 'O';
-              inbuff[1] = 'C';
-              inbuff[2] = 'E';
-              inbuff[3] = 'S';
-              inbuff[4] = 'Q';
-              inbuff[5] = 'L';
-              inbuff[6] = '*';
+            if (l->next != NULL){
+              l = l->next;
             }
-            outbuff = inbuff;
-            len = strlen(outbuff);
-            fwrite(outbuff, len, 1, outfile);
-          } else {
-            outbuff = inbuff;
-            len = strlen(outbuff);
-            fwrite(outbuff, len, 1, outfile);
           }
+        } 
+        else {
+          outbuff = inbuff;
+          len = strlen(outbuff);
+          fwrite(outbuff, len, 1, outfile);
         }
       } else {
         outbuff = inbuff;

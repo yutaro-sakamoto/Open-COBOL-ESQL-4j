@@ -59,6 +59,12 @@ yyinput (char *buf, int max_size);
 #define SET_LOCATION(x)				\
   (x)->source_file = (unsigned char *)cb_source_file;		\
 
+#define YY_NO_UNISTD_H
+#ifdef _WIN32
+#include <io.h>
+#else
+#include <unistd.h>
+#endif
 %}
 
 %s PICTURE_STATE WORKING_STATE
