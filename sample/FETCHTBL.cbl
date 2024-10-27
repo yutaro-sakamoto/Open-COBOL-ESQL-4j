@@ -47,7 +47,7 @@
            
       *    CONNECT
            MOVE  "testdb"          TO   DBNAME.
-           MOVE  "postgres"        TO   USERNAME.
+           MOVE  "main_user"        TO   USERNAME.
            MOVE  "password"        TO   PASSWD.
            EXEC SQL
                CONNECT :USERNAME IDENTIFIED BY :PASSWD USING :DBNAME 

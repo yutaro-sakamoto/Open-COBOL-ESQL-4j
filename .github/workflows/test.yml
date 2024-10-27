@@ -114,6 +114,11 @@ jobs:
           make
           make install
 
+      # Run sample programs
+      - name: Run sample programs
+        working-directory: sample
+        run: make
+
       # Run Autotest for PostgreSQL 9.6
       - name: Run tests for PostgreSQL 9.6
         working-directory: tests
