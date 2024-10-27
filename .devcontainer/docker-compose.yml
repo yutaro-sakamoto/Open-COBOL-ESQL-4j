@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  ocsql4j_dev_db:
+    image: postgres:10
+    container_name: ocsql4j_dev_db
+    environment:
+      - POSTGRES_USER=main_user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=testdb
+    ports:
+      - "5432:5432"
+
+  ocsql4j_dev_client:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ocsql4j_dev_client
+    stdin_open: true
+    tty: true
+    depends_on:
+      ocsql4j_dev_db:
+        condition: service_started
+    logging:
+      driver: none

@@ -1,0 +1,7 @@
+{
+    "name": "Open COBOL ESQL 4J development",
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "ocesql4j-dev-client",
+    "workspaceFolder": "/root/workspace",
+    "postCreateCommand": ".devcontainer/boot.sh && source ~/.bashrc"
+}
