@@ -88,7 +88,7 @@ jobs:
       - name: Checkout Open-COBOL-ESQL-4j
         uses: actions/checkout@v4
         with:
-          recursive: true
+          submodules: recursive
       
       # Install opensource COBOL 4J
       - name: Install opensource COBOL 4J
