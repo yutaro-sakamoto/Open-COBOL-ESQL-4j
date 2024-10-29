@@ -17,6 +17,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+      with:
+        submodules: recursive
 
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v2.0.0
@@ -35,12 +37,6 @@ jobs:
         database: testdb
         port: 5432
       id: postgres
-
-    - name: Checkout opensource COBOL 4J
-      uses: actions/checkout@v4
-      with:
-        repository: opensourcecobol/opensourcecobol4j
-        path: opensourcecobol4j
     
     - name: Build libcobj.jar
       working-directory: opensourcecobol4j/libcobj

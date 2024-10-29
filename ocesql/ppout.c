@@ -2002,24 +2002,23 @@ void ppoutput(char *ppin, char *ppout, struct cb_exec_list *head) {
           len = strlen(outbuff);
           fwrite(outbuff, len, 1, outfile);
 
-          if (strstr(inbuff, "\n") == NULL){
+          if (strstr(inbuff, "\n") == NULL) {
             fputc('\n', outfile);
           }
           if (EOFflg == 1) {
             fputc('\n', outfile);
           }
 
-          if (lineNUM == l->endLine){
+          if (lineNUM == l->endLine) {
             if (strcmp(l->commandName, "WORKING_END")) {
               ppbuff(l);
             }
 
-            if (l->next != NULL){
+            if (l->next != NULL) {
               l = l->next;
             }
           }
-        } 
-        else {
+        } else {
           outbuff = inbuff;
           len = strlen(outbuff);
           fwrite(outbuff, len, 1, outfile);

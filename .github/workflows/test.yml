@@ -57,19 +57,20 @@ jobs:
           --health-retries 5
 
     steps:
+
       # Install dependencies (Ubuntu 24.04)
       - name: Install dependencies on Ubuntu 24.04
         if: matrix.os == 'ubuntu:24.04'
         run: |
           apt update -y
-          apt install -y build-essential bison flex gettext texinfo automake autoconf curl
+          apt install -y build-essential bison flex gettext texinfo automake autoconf curl git
 
       # Install dependencies (Almalinux 9)
       - name: Install dependencies on AlmaLinux 9
         if: matrix.os == 'almalinux:9'
         run: |
           dnf -y update
-          dnf install -y gcc make bison flex automake autoconf diffutils gettext
+          dnf install -y gcc make bison flex automake autoconf diffutils gettext git
 
       # Setup JDK
       - name: Setup JDK
@@ -87,14 +88,9 @@ jobs:
       # Checkout
       - name: Checkout Open-COBOL-ESQL-4j
         uses: actions/checkout@v4
-          
-      # Checkout opensource COBOL 4J
-      - name: Checkout opensourcecobol 4J
-        uses: actions/checkout@v4
         with:
-          repository: opensourcecobol/opensourcecobol4j
-          path: opensourcecobol4j
-      
+          submodules: recursive
+
       # Install opensource COBOL 4J
       - name: Install opensource COBOL 4J
         working-directory: opensourcecobol4j
