@@ -13,4 +13,3 @@ RUN dnf install -y gcc make bison flex automake autoconf diffutils gettext java-
 
 # install sbt
 RUN curl -fL https://github.com/coursier/coursier/releases/latest/download/cs-x86_64-pc-linux.gz | gzip -d > cs && chmod +x cs && echo Y | ./cs setup
-RUN mkdir -p /workspaces/Open-COBOL-ESQL-4j
