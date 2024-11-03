@@ -17,6 +17,9 @@ cp /usr/lib/Open-COBOL-ESQL-4j/postgresql.jar dblibj/lib/
 make
 make install
 
+# Set up git config
+git config --global --add safe.directory /workspaces/Open-COBOL-ESQL-4j
+
 # Set up pre-commit hook
 cp .devcontainer/term_settings/pre-commit .git/hooks/pre-commit
 
