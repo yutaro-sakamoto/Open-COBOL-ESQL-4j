@@ -161,3 +161,8 @@ After the build is completed, "cobj.exe" will be created in `win\x64\Debug` or `
 #### Set the environment variables
 1. Add `C:\ocesql4j\bin` to "PATH".
 2. Add `C:\ocesql4j\lib\ocesql4j.jar` and `C:\ocesql4j\lib\postgresql.jar` to "CLASSPATH".
+
+# Contributing
+
+Guidelines for contributing to Open COBOL ESQL 4J can be found in [CONTRIBUTING.md](./CONTRIBUTING.md).
+Contributors are listed in https://github.com/opensourcecobol/Open-COBOL-ESQL-4j/graphs/contributors
