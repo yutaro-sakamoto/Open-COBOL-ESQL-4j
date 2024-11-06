@@ -1,5 +1,7 @@
 # Open COBOL ESQL 4J
 
+[日本語版README](./README_JP.md)
+
 Open COBOL ESQL 4J (OCESQL 4J) consits of open-source Embedded SQL pre-compiler and run time libraries for [opensource COBOL 4J](https://github.com/opensourcecobol/opensourcecobol4j).
 
 # Supported software versions
@@ -19,10 +21,9 @@ Open COBOL ESQL 4J (OCESQL 4J) consits of open-source Embedded SQL pre-compiler 
 
 ## Requirements
 
-* Open-source database.
-  OCESQL 4J currently supports PostgreSQL database only.
+* PostgreSQL Database
 
-* [opensource COBOL 4j](https://github.com/opensourcecobol/opensourcecobol4j) v1.1.12 or later.
+* [opensource COBOL 4j](https://github.com/opensourcecobol/opensourcecobol4j) v1.1.2 or later.
 
 * [sbt](https://www.scala-sbt.org/).
 
@@ -31,9 +32,9 @@ Open COBOL ESQL 4J (OCESQL 4J) consits of open-source Embedded SQL pre-compiler 
 
 ### Install opensource COBOL 4J
 
-See [Installation guides of opensource COBOL 4J](https://github.com/opensourcecobol/opensourcecobol4j/wiki).
+See [README.md of opensource COBOL 4J](https://github.com/opensourcecobol/opensourcecobol4j/blob/develop/README.md).
 
-### Download the content
+## Download Open COBOL ESQL 4J
 
 Run the following commands to download Open COBOL ESQL 4J.
 
@@ -121,7 +122,7 @@ The Windows version of Open COBOL ESQL 4J uses the CL compiler included in Visua
 
 
 #### Build a solution file
-1. Download the complete set of files for opensource COBOL 4J.
+1. Download the complete set of files for [opensource COBOL 4J](https://github.com/opensourcecobol/opensourcecobol4j).
 2. Open win/ocesql.sln with Visual Studio.
 3. Select "Debug" or "Release" mode.
 ![alt text](image/readme1.png)
@@ -156,9 +157,10 @@ After the build is completed, "cobj.exe" will be created in `win\x64\Debug` or `
     | ocesql.exe | C:\ocesql4j\bin |
     | ocesql4j.jar | C:\ocesql4j\lib |
 
-*  If you want to change the location of the files, modify "install.ps1".
+* If you want to change the location of the files, modify "install.ps1".
 
 #### Set the environment variables
+
 1. Add `C:\ocesql4j\bin` to "PATH".
 2. Add `C:\ocesql4j\lib\ocesql4j.jar` and `C:\ocesql4j\lib\postgresql.jar` to "CLASSPATH".
 
