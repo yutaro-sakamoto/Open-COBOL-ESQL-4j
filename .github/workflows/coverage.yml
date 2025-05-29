@@ -1,0 +1,142 @@
+name: Coverage
+
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check-workflows:
+    uses: ./.github/workflows/check-workflows.yml
+
+  Open-COBOL-ESQL-Coverage:
+    needs: check-workflows
+    runs-on: ubuntu-latest
+    container:
+      image: "ubuntu:24.04"
+
+    # Start PostgreSQL server
+    services:
+      postgres:
+        image: postgres:9.6
+        ports: 
+          - 5432:5432
+        env:
+          POSTGRES_PASSWORD: password
+          POSTGRES_USER: main_user
+          POSTGRES_DB: testdb
+          POSTGRES_HOST_AUTH_METHOD: 'trust'
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+
+      # Install dependencies (Ubuntu 24.04)
+      - name: Install dependencies on Ubuntu 24.04
+        run: |
+          apt update -y
+          # Install dependencies of Open-COBOL-ESQL
+          apt install -y build-essential bison flex gettext texinfo automake autoconf curl libtool libpq-dev pkgconf
+          # Install dependencies of opensource COBOL
+          apt install -y libgmp-dev
+          # Install gcovr for coverage reporting
+          apt install -y gcovr
+
+      # Cache the directory 'opensource-cobol-1.5.2J'
+      - name: Cache opnesource COBOL v1.5.2J
+        id: opensource_cobol_cache_id
+        uses: actions/cache@v4
+        with:
+          path: opensource-cobol-1.5.2J
+          key: coverage-opensource-cobol-1.5.2J-key
+          
+      # Build opensource COBOL if the cache is not found
+      - name: Download and Build opensource COBOL v1.5.2J
+        if: steps.opensource_cobol_cache_id.outputs.cache-hit != 'true'
+        run: |
+          curl -L -o opensource-cobol-1.5.2J.tar.gz https://github.com/opensourcecobol/opensource-cobol/archive/refs/tags/v1.5.2J.tar.gz
+          tar zxf opensource-cobol-1.5.2J.tar.gz
+          cd opensource-cobol-1.5.2J/vbisam
+          ./configure --prefix=/usr/
+          make
+          make install
+          cd ../
+          ./configure --prefix=/usr/ --with-vbisam
+          make
+      
+      # Install opensource COBOL
+      - name: Install opensource COBOL v1.5.2J
+        run: |
+          cd opensource-cobol-1.5.2J/vbisam
+          make install
+          cd ../
+          make install
+
+      # Checkout Open-COBOL-ESQL
+      - name: Checkout Open-COBOL-ESQL
+        uses: actions/checkout@v4
+        with:
+          path: Open-COBOL-ESQL
+
+      # Build and Install Open-COBOL-ESQL
+      - name: Install Open-COBOL-ESQL
+        working-directory: Open-COBOL-ESQL
+        run: |
+          chmod +x ./autogen.sh && ./autogen.sh
+          ./configure CFLAGS='-fprofile-arcs -ftest-coverage -Werror'
+          make install
+
+      # Create a log directory
+      - name: Create a log directory
+        run: |
+          mkdir -p Open-COBOL-ESQL/log/test
+
+      # Run Autotest
+      - name: Run tests
+        working-directory: Open-COBOL-ESQL/tests
+        run: |
+          make clean
+          cp ../.github/workflows/test-settings/atlocal atlocal
+          cp ../.github/workflows/test-settings/embed_db_info.sh embed_db_info.sh
+          cp ../.github/workflows/test-settings/cobol_runner.sh cobol_runner.sh
+          make
+          ./basic || true
+          ./cobol_data || true
+          ./sql_data || true
+          ./sqlca || true
+          ./misc || true
+
+      # Make coverage reports
+      - name: Make coverage reports of ocesql
+        working-directory: ocesql
+        run: |
+          gcov -l ./*.gcda
+          gcovr -r . --html --html-details --html-self-contained -o report.html --txt-metric=branch
+          mkdir coverage-report
+          cp ./*.html coverage-report
+
+      - name: Make coverage reports of dblib
+        working-directory: dblib
+        run: |
+          gcov -l ./*.gcda
+          gcovr -r . --html --html-details --html-self-contained -o report.html --txt-metric=branch
+          mkdir coverage-report
+          cp ./*.html coverage-report
+
+      # Upload scoverage report
+      - name: Archive coverage reports of ocesql
+        uses: actions/upload-artifact@v4
+        with:
+          name: code-coverage-report-ocesql
+          path: ocesql/coverage-report/
+
+      - name: Archive coverage reports of dblib
+        uses: actions/upload-artifact@v4
+        with:
+          name: code-coverage-report-dblib
+          path: dblib/coverage-report/
