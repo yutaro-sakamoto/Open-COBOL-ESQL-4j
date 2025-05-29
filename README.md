@@ -1,5 +1,7 @@
 # Open COBOL ESQL 4J
 
+[日本語版README](./README_JP.md)
+
 Open COBOL ESQL 4J (OCESQL 4J) consits of open-source Embedded SQL pre-compiler and run time libraries for [opensource COBOL 4J](https://github.com/opensourcecobol/opensourcecobol4j).
 
 # Supported software versions
@@ -19,10 +21,9 @@ Open COBOL ESQL 4J (OCESQL 4J) consits of open-source Embedded SQL pre-compiler 
 
 ## Requirements
 
-* Open-source database.
-  OCESQL 4J currently supports PostgreSQL database only.
+* PostgreSQL Database
 
-* [opensource COBOL 4j](https://github.com/opensourcecobol/opensourcecobol4j) v1.1.12 or later.
+* [opensource COBOL 4j](https://github.com/opensourcecobol/opensourcecobol4j) v1.1.2 or later.
 
 * [sbt](https://www.scala-sbt.org/).
 
@@ -31,21 +32,47 @@ Open COBOL ESQL 4J (OCESQL 4J) consits of open-source Embedded SQL pre-compiler 
 
 ### Install opensource COBOL 4J
 
-See [Installation guides of opensource COBOL 4J](https://github.com/opensourcecobol/opensourcecobol4j/wiki).
+See [README.md of opensource COBOL 4J](https://github.com/opensourcecobol/opensourcecobol4j/blob/develop/README.md).
+
+## Download Open COBOL ESQL 4J
+
+Run the following commands to download Open COBOL ESQL 4J.
+
+```sh
+curl -L -o Open-COBOL-ESQL-4j-v1.1.1.tar.gz https://github.com/opensourcecobol/Open-COBOL-ESQL-4j/archive/refs/tags/v1.1.1.tar.gz
+tar zxvf Open-COBOL-ESQL-4j-v1.1.1.tar.gz
+# If you don't need the downloaded file, you can delete it.
+rm Open-COBOL-ESQL-4j-v1.1.1.tar.gz
+```
 
 ### Prepare jar files
 
-Copy libcobj.jar, which is the runtime library of opensource COBOL 4J, to `dblibj/lib/libcobj.jar`.
-After you complete the installation procedure described in [Installation guides of opensource COBOL 4J](https://github.com/opensourcecobol/opensourcecobol4j/wiki), you can find libcobj.jar in `/usr/lib/opensourcecobol4j/`.
+You need 2 jar files.
 
-In addtion, execute the following command to prepare postgresql jdbc driver.
+#### `libcobj.jar`
+
+Run the follwing commands.
+
+```sh
+cd Open-COBOL-ESQL-4j-1.1.1/
+cp /usr/lib/opensourcecobol4j/libcobj.jar dblibj/lib/
+```
+
+If you have already installed opensource COBOL 4J, `/usr/lib/opensourcecobol4j/libcobj.jar` exists.
+When you run `find /usr/lib/ -name libcobj.jar`, the above path should be displayed.
+
+#### `postgresql.jar`
+
+In addtion, run the following commands to prepare postgresql jdbc driver.
+Some commands may lack permissions.
+In such case, prefix them with `sudo`.
 
 ```sh
 # Move to the root directory of Open-COBOL-ESQL-4j
-cd Open-COBOL-ESQL-4j/
-mkdir -p /usr/lib/Open-COBOL-ESQL-4j/
-curl -L -o /usr/lib/Open-COBOL-ESQL-4j/postgresql.jar https://jdbc.postgresql.org/download/postgresql-42.2.24.jar
-cp /usr/lib/Open-COBOL-ESQL-4j/postgresql.jar dblibj/lib
+cd Open-COBOL-ESQL-4j-1.1.1/
+mkdir -p /usr/lib/Open-COBOL-ESQL-4j-1.1.1/
+curl -L -o /usr/lib/Open-COBOL-ESQL-4j-1.1.1/postgresql.jar https://jdbc.postgresql.org/download/postgresql-42.2.24.jar
+cp /usr/lib/Open-COBOL-ESQL-4j-1.1.1/postgresql.jar dblibj/lib
 ```
 
 ### sbt
@@ -62,7 +89,9 @@ make
 make install
 ```
 
-Then, add `/usr/lib/Open-COBOL-ESQL-4j/ocesql4j.jar` and `/usr/lib/Open-COBOL-ESQL-4j/postgresql.jar` to $CLASSPATH.
+### Set `$CLASSPATH`
+
+Add `/usr/lib/Open-COBOL-ESQL-4j/ocesql4j.jar` and `/usr/lib/Open-COBOL-ESQL-4j/postgresql.jar` to $CLASSPATH.
 
 ```sh
 export CLASSPATH="$CLASSPATH":/usr/lib/Open-COBOL-ESQL-4j/ocesql4j.jar:/usr/lib/Open-COBOL-ESQL-4j/postgresql.jar
@@ -93,7 +122,7 @@ The Windows version of Open COBOL ESQL 4J uses the CL compiler included in Visua
 
 
 #### Build a solution file
-1. Download the complete set of files for opensource COBOL 4J.
+1. Download the complete set of files for [opensource COBOL 4J](https://github.com/opensourcecobol/opensourcecobol4j).
 2. Open win/ocesql.sln with Visual Studio.
 3. Select "Debug" or "Release" mode.
 ![alt text](image/readme1.png)
@@ -128,8 +157,14 @@ After the build is completed, "cobj.exe" will be created in `win\x64\Debug` or `
     | ocesql.exe | C:\ocesql4j\bin |
     | ocesql4j.jar | C:\ocesql4j\lib |
 
-*  If you want to change the location of the files, modify "install.ps1".
+* If you want to change the location of the files, modify "install.ps1".
 
 #### Set the environment variables
+
 1. Add `C:\ocesql4j\bin` to "PATH".
 2. Add `C:\ocesql4j\lib\ocesql4j.jar` and `C:\ocesql4j\lib\postgresql.jar` to "CLASSPATH".
+
+# Contributing
+
+Guidelines for contributing to Open COBOL ESQL 4J can be found in [CONTRIBUTING.md](./CONTRIBUTING.md).
+Contributors are listed in https://github.com/opensourcecobol/Open-COBOL-ESQL-4j/graphs/contributors
