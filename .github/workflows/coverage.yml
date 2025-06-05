@@ -113,7 +113,7 @@ jobs:
 
       # Make coverage reports
       - name: Make coverage reports of ocesql
-        working-directory: ocesql
+        working-directory: Open-COBOL-ESQL/ocesql
         run: |
           gcov -l ./*.gcda
           gcovr -r . --html --html-details --html-self-contained -o report.html --txt-metric=branch
@@ -121,7 +121,7 @@ jobs:
           cp ./*.html coverage-report
 
       - name: Make coverage reports of dblib
-        working-directory: dblib
+        working-directory: Open-COBOL-ESQL/dblib
         run: |
           gcov -l ./*.gcda
           gcovr -r . --html --html-details --html-self-contained -o report.html --txt-metric=branch
@@ -133,10 +133,10 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: code-coverage-report-ocesql
-          path: ocesql/coverage-report/
+          path: Open-COBOL-ESQL/ocesql/coverage-report/
 
       - name: Archive coverage reports of dblib
         uses: actions/upload-artifact@v4
         with:
           name: code-coverage-report-dblib
-          path: dblib/coverage-report/
+          path: Open-COBOL-ESQL/dblib/coverage-report/
